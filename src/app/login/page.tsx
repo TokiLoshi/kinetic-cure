@@ -104,6 +104,16 @@ export default function Page() {
 					</div>
 				</form>
 			</div>
+			<div className='mt-8 text-center'>
+				<p className='text-center text-gray-500 text-xs'>
+					Dont have an account yet?{" "}
+					<Link
+						className='text-center text-gray-500 text-xs hover:text-indigo-500'
+						href='/signup'>
+						Create one here.
+					</Link>
+				</p>
+			</div>
 		</>
 	);
 }
