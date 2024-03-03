@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import NavBar from "@/components/navbar";
 
 interface SignupFormState {
 	email: string;
@@ -73,6 +74,7 @@ export default function Page() {
 	};
 	return (
 		<>
+			<NavBar />
 			<div className='flex justify-center m-2'>
 				<form ref={formRef} onSubmit={handleSubmit}>
 					<h1 className='flex justify-center m-2 text-gray-500 font-bold'>

@@ -21,5 +21,5 @@ async function logWorkout({
 }
 
 export default function Page() {
-	return <h1>This is the log workout page</h1>;
+	return <h1 className='m-2'>This is the log workout page</h1>;
 }

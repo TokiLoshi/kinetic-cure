@@ -1,3 +1,9 @@
+import NavBar from "@/components/navbar";
 export default function Page() {
-	return <h1>This is the dashboard page for users</h1>;
+	return (
+		<>
+			<NavBar />
+			<h1 className='text-center mt-2 text-bold'>Dashboard will go here</h1>
+		</>
+	);
 }

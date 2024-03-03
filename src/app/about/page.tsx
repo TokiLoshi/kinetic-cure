@@ -1,3 +1,12 @@
+import NavBar from "@/components/navbar";
+
 export default function Page() {
-	return <h1>Hello About Page</h1>;
+	return (
+		<>
+			<NavBar />
+			<div className='flex justify-center m-2'>
+				<h1 className='flex justify-center m-2 '>About Page will go here</h1>
+			</div>
+		</>
+	);
 }
