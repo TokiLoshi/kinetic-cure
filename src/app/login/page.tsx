@@ -117,6 +117,7 @@ export default function Page() {
 					</Link>
 				</p>
 			</div>
+			<Footer />
 		</>
 	);
 }

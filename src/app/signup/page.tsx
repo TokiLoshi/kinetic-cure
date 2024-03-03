@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import NavBar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 interface SignupFormState {
 	email: string;
@@ -203,6 +204,7 @@ export default function Page() {
 					</Link>
 				</p>
 			</div>
+			<Footer />
 		</>
 	);
 }

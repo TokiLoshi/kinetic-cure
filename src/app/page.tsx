@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import NavBar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
 	title: "Kinetic Cure",
@@ -16,6 +17,7 @@ export default function Page() {
 					Welcome to Kinetic Cure on Next.js
 				</h1>
 			</div>
+			<Footer />
 		</>
 	);
 }
