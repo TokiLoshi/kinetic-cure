@@ -2,6 +2,17 @@
 
 Community Hackathon Project hosted by DonTheDeveloper
 
+## About the Databse
+
+Kinetic Cure has a postgreSQL database provisioned through Vercel. Here are the initial thoughts on the database schema:
+
+![alt text](DBscreenshot1.png)
+![alt text](DBscreenshot2.png)
+
+This is a work in progress and I plan to remove these from the root and generate better documentation about the database schema.
+
+## How to Run
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
