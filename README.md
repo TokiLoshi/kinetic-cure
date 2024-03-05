@@ -11,6 +11,8 @@ Kinetic Cure has a postgreSQL database provisioned through Vercel. Here are the 
 
 This is a work in progress and I plan to remove these from the root and generate better documentation about the database schema.
 
+Decided to use API ninjas api and signed up for a free api key, documentation: https://api-ninjas.com/api/exercises
+
 ## How to Run
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
