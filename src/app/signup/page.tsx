@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { useRouter } from "next/navigation";
 
 interface SignupFormState {
 	email: string;
@@ -19,6 +20,7 @@ interface FormErrors {
 }
 
 export default function Page() {
+	const router = useRouter();
 	console.log("This is the signup page");
 	const formRef = useRef<HTMLFormElement>(null);
 	const [formState, setFormState] = useState<SignupFormState>({
@@ -72,6 +74,7 @@ export default function Page() {
 			return;
 		}
 		console.log("All good, submit the form!");
+		router.push("/login");
 	};
 	return (
 		<>

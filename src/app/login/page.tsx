@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { useRouter } from "next/navigation";
 
 interface LoginFormState {
 	email: string;
@@ -16,6 +17,7 @@ interface FormErrors {
 
 export default function Page() {
 	console.log("This is the login page");
+	const router = useRouter();
 	const formRef = useRef<HTMLFormElement>(null);
 	const [formState, setFormState] = useState<LoginFormState>({
 		email: "",
@@ -35,6 +37,7 @@ export default function Page() {
 		e.preventDefault();
 		const { email, password } = formState;
 		console.log("Form submitted", formState);
+		router.push("/dashboard");
 	};
 
 	return (

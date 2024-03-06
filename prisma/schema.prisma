@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String?
+  dateJoined DateTime
+  workouts Workouts[]
+  ptExercises PTExercises[]
+  personalRecords PersonalRecords[]
+  distanceMetric String
+  weightMetric String
+  totalWorkouts Int
+}
+
+model Workouts {
+  id Int @id @default(autoincrement())
+  athleteId Int
+  athlete User @relation(fields: [athleteId], references: [id])
+  dateCompleted DateTime
+  notes String
+  personalRecord Boolean
+  distance Float 
+  workoutExercises WorkoutExercise[]
+}
+
+model PTWorkouts {
+  id Int @id @default(autoincrement())
+  athleteId Int
+  athlete User @relation(fields: [athleteId], references: [id])
+  dateCompleted DateTime
+  notes String
+  reps Int
+  frequency Int
+}
+
+model MuscleGroup {
+  id Int @id @default(autoincrement())
+  name String @unique
+  exercises ExerciseMuscleGroup[]
+}
+
+model Exercises {
+  id Int @id @default(autoincrement())
+  name String @unique
+  authorId Int
+  author User @relation(fields: [authorId], references: [id])
+  description String
+  muscleGroups ExerciseMuscleGroup[]
+  videoLink String
+  workoutExercises WorkoutExercise[]
+}
+
+model PTExercises {
+  ptWorkoutId Int
+  ptExerciseId Int 
+  ptWorkout PTWorkouts @relation(fields: [ptWorkoutId], references: [id])
+  description String 
+  muscleGroup ExerciseMuscleGroup[]
+  videoLink String
+  ptWorkoutExercises PTWorkoutExercise[]
+}
+
+model WorkoutExercise {
+  workoutId Int
+  exerciseId Int
+  workout Workouts @relation(fields: [workoutId], references: [id])
+  exercise Exercises @relation(fields: [exerciseId], references: [id])
+  @@id([workoutId, exerciseId])
+}
+
+model PTWorkoutExercise {
+  ptWorkoutId Int
+  ptExerciseId Int
+  ptWorkout PTWorkouts @relation(fields: [ptWorkoutId], references: [id])
+  ptExercise PTExercises @relation(fields: [ptExerciseId], references: [ptExerciseId])
+  @@id([ptWorkoutId, ptExerciseId])
+}
+
+model ExerciseMuscleGroup {
+  muscleGroupId Int
+exerciseId Int
+ptExerciseId Int
+ exercise Exercises @relation(fields: [exerciseId], references: [id])
+ muscleGroup MuscleGroup @relation(fields: [muscleGroupId], references: [id])
+ @@id([exerciseId, muscleGroupId])
+}
+
+model PersonalRecords {
+  id Int @id @default(autoincrement())
+  athleteId Int
+  athlete User @relation(fields: [athleteId], references: [id])
+  reps Int
+  distance Float 
+  weight Float
+}
