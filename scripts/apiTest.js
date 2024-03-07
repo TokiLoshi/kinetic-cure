@@ -1,5 +1,7 @@
 import request from "request";
 
+const API_KEY = process.env.API_KEY;
+
 const muscle = "biceps";
 request.get(
 	{

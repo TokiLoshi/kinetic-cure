@@ -26,10 +26,10 @@ export default function Page() {
 	const [error, setError] = useState<FormErrors>({});
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const { id, value } = event.target;
+		const { name, value } = event.target;
 		setFormState((previousState) => ({
 			...previousState,
-			[id]: value,
+			[name]: value,
 		}));
 	};
 

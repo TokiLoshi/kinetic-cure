@@ -1,10 +1,31 @@
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Link from "next/link";
+
 export default function Page() {
 	return (
 		<>
 			<NavBar />
-			<h1 className='text-center mt-2 text-bold'>Dashboard will go here</h1>
+			<h1 className='text-center m-2 text-bold'>
+				Welcome back username, what shall we do next?
+			</h1>
+
+			<div className='flex justify-center'>
+				<button className='m-2'>
+					<Link
+						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'
+						href='/dashboard/logworkout'>
+						Log Workout
+					</Link>
+				</button>
+				<button className='m-2'>
+					<Link
+						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'
+						href='/dashboard/addworkout'>
+						Add Workout
+					</Link>
+				</button>
+			</div>
 			<Footer />
 		</>
 	);

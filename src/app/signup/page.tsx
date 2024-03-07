@@ -38,7 +38,7 @@ export default function Page() {
 		console.log(event.target);
 		setFormState((previousState) => ({
 			...previousState,
-			[id]: type === "checkbox" ? checked : value,
+			[name]: type === "checkbox" ? checked : value,
 		}));
 	};
 

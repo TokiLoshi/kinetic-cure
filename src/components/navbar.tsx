@@ -61,11 +61,7 @@ export default function Navbar() {
 						<Link className='m-2 text-white hover:text-lime-300' href='/signup'>
 							Sign up
 						</Link>
-						<Link
-							className='m-2 text-white  hover:text-lime-300'
-							href='/dashboard/logworkout'>
-							Log Workout
-						</Link>
+
 						<Link
 							className='m-2 text-white hover:text-lime-300'
 							href='/dashboard'>
