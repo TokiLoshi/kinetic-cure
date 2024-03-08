@@ -67,7 +67,7 @@ export default function Page() {
 		}
 		console.log("All good, submit the form!");
 		try {
-			const response = await fetch("/api/workouts", {
+			const response = await fetch("/workouts", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -86,10 +86,16 @@ export default function Page() {
 		}
 	};
 
+	const updateExercises = async (formData: FormData) => {
+		"use server";
+		console.log("running a server action");
+		console.log(`Form Data: ${formData}`);
+	};
+
 	return (
 		<>
 			<div className='flex justify-center m-2'>
-				<form ref={formRef} onSubmit={handleSubmint}>
+				<form ref={formRef} action={updateExercises} method='POST'>
 					<h1 className='flex justify-center m-2 text-gray-500 font-bold'>
 						Add a workout
 					</h1>
