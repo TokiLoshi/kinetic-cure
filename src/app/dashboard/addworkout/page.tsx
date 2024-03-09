@@ -1,7 +1,7 @@
 import { sql } from "@vercel/postgres";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import WorkoutForm from "@/components/workoutForm";
+import { WorkoutForm } from "@/components/workoutForm";
 
 export default function Page() {
 	const updateExercises = async (formData: FormData) => {
