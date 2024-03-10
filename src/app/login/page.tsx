@@ -6,16 +6,6 @@ import Footer from "@/components/footer";
 import { useRouter } from "next/navigation";
 import LoginForm from "@/components/loginForm";
 
-interface LoginFormState {
-	email: string;
-	password: string;
-}
-
-interface FormErrors {
-	email?: string;
-	password?: string;
-}
-
 export default function Page() {
 	console.log("This is the login page");
 	return (

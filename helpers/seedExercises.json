@@ -1,0 +1,94 @@
+{
+	"Exercises": [
+		{
+			"id": 1,
+			"name": "lawn mower rower",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["lats", "obliques", "traps"],
+			"videoLink": ""
+		},
+		{
+			"id": 2,
+			"name": "overhead press",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["shoulders"],
+			"videoLink": ""
+		},
+		{
+			"id": 3,
+			"name": "chest press",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["shoulders", "chest", "triceps"],
+			"videoLink": ""
+		},
+		{
+			"id": 4,
+			"name": "devils press",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["shoulders"],
+			"videoLink": ""
+		},
+		{
+			"id": 5,
+			"name": "overhead press",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["shoulders"],
+			"videoLink": ""
+		},
+		{
+			"id": 7,
+			"name": "reverse lunch",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["glutes", "quads", "hamstrings", "calves"],
+			"videoLink": ""
+		},
+		{
+			"id": 8,
+			"name": "romanian deadlift",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["glutes", "hamstrings", "quads"],
+			"videoLink": ""
+		},
+		{
+			"id": 9,
+			"name": "push press",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["shoulders"],
+			"videoLink": ""
+		},
+		{
+			"id": 2,
+			"name": "overhead press",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["shoulders"],
+			"videoLink": ""
+		},
+		{
+			"id": 2,
+			"name": "overhead press",
+			"authorId": 1,
+			"author": "admin@kinetic-cure.com",
+			"description": "",
+			"muscleGroups": ["shoulders"],
+			"videoLink": ""
+		}
+	]
+}
