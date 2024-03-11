@@ -1,10 +1,7 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-export function middleware(request: NextRequest) {
-	return NextResponse.redirect(new URL("/home", request.url));
-}
+import type { NextAuthConfig } from "next-auth";
+import { authConfig } from "./auth.config";
 
 export const config = {
-	matcher: "/about/:path*",
+	// https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+	matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

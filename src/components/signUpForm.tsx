@@ -1,12 +1,21 @@
 "use client";
 import { useFormState, useFormStatus } from "react-dom";
 import { validateSignUp } from "@/app/lib/actions";
-import { useState, FormEvent } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+
+const initialState = {
+	errors: {
+		email: [],
+		password: [],
+		confirmPassword: [],
+	},
+	message: null,
+};
 
 export default function SignUpForm() {
 	const initialState = { message: null, errors: {} };
-	const [error, dispatch] = useFormState(validateSignUp, initialState);
-	const [errorState, setError] = useState(" ");
+	const [state, dispatch] = useFormState(validateSignUp, initialState);
 
 	return (
 		<>
@@ -33,8 +42,10 @@ export default function SignUpForm() {
 								autoComplete='email'
 								required
 							/>
-							{errorState && (
-								<p className='text-red-500 text-xs italic'>{errorState}</p>
+							{state.errors?.email && (
+								<p className='text-red-500 text-xs italic'>
+									{state.errors.email}
+								</p>
 							)}
 						</div>
 					</div>
@@ -56,8 +67,10 @@ export default function SignUpForm() {
 								autoComplete='new-password'
 								required
 							/>
-							{errorState && (
-								<p className='text-red-500 text-xs italic'>{errorState}</p>
+							{state.errors?.password && (
+								<p className='text-red-500 text-xs italic'>
+									{state.errors.password}
+								</p>
 							)}
 						</div>
 					</div>
@@ -79,8 +92,10 @@ export default function SignUpForm() {
 								autoComplete='new-password'
 								required
 							/>
-							{errorState && (
-								<p className='text-red-500 text-xs italic'>{errorState}</p>
+							{state.errors?.confirmPassword && (
+								<p className='text-red-500 text-xs italic'>
+									{state.errors.confirmPassword}
+								</p>
 							)}
 						</div>
 					</div>
