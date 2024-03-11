@@ -4,13 +4,17 @@ import Link from "next/link";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import SignUpForm from "@/components/signUpForm";
+import { validateSignUp } from "@/app/lib/actions";
 
 export default function Page() {
 	console.log("This is the signup page");
 	return (
 		<>
 			<NavBar />
-			<SignUpForm />
+			<SignUpForm
+				formAction={validateSignUp}
+				initialData={{ email: "", password: "", confirmPassword: "" }}
+			/>
 			<div className='mt-8 text-center '>
 				<p className='text-center text-gray-500 text-xs'>
 					Already have an account?{" "}

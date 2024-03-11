@@ -4,22 +4,33 @@ import { validateSignUp } from "@/app/lib/actions";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const initialState = {
-	errors: {
-		email: [],
-		password: [],
-		confirmPassword: [],
-	},
-	message: null,
-};
+interface formErrors {
+	email?: [];
+	password?: [];
+	confirmPassword?: [];
+}
 
-export default function SignUpForm() {
-	const initialState = { message: null, errors: {} };
-	const [state, dispatch] = useFormState(validateSignUp, initialState);
+interface formState {
+	errors: formErrors;
+}
+
+interface PostFormProps {
+	formAction: any;
+	initialData: {
+		email: string;
+		password: string;
+		confirmPassword: string;
+	};
+}
+
+export default function SignUpForm({ formAction, initialData }: PostFormProps) {
+	const [formState, action] = useFormState<formState>(formAction, {
+		errors: {},
+	});
 
 	return (
 		<>
-			<form action={dispatch}>
+			<form action={action}>
 				<h1 className='flex justify-center m-2 text-gray-500 font-bold'>
 					Sign up
 				</h1>
@@ -42,9 +53,9 @@ export default function SignUpForm() {
 								autoComplete='email'
 								required
 							/>
-							{state.errors?.email && (
+							{formState.errors?.email && (
 								<p className='text-red-500 text-xs italic'>
-									{state.errors.email}
+									{formState.errors.email}
 								</p>
 							)}
 						</div>
@@ -67,9 +78,9 @@ export default function SignUpForm() {
 								autoComplete='new-password'
 								required
 							/>
-							{state.errors?.password && (
+							{formState.errors?.password && (
 								<p className='text-red-500 text-xs italic'>
-									{state.errors.password}
+									{formState.errors.password}
 								</p>
 							)}
 						</div>
@@ -92,9 +103,9 @@ export default function SignUpForm() {
 								autoComplete='new-password'
 								required
 							/>
-							{state.errors?.confirmPassword && (
+							{formState.errors?.confirmPassword && (
 								<p className='text-red-500 text-xs italic'>
-									{state.errors.confirmPassword}
+									{formState.errors.confirmPassword}
 								</p>
 							)}
 						</div>

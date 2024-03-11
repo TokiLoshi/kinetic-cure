@@ -5,7 +5,8 @@ import { z } from "zod";
 import { signIn } from "../../../auth";
 import { AuthError } from "next-auth";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
@@ -35,7 +36,9 @@ export async function authenticate(
 const SignUpSchema = z
 	.object({
 		email: z.string().email("Please enter a valid email"),
-		password: z.string().min(8, "Password should be at least 8 characters"),
+		password: z
+			.string()
+			.min(8, "Password should be at least more characters. Please try again"),
 		confirmPassword: z.string(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
@@ -43,8 +46,19 @@ const SignUpSchema = z
 		path: ["confirmPassword"],
 	});
 
+interface SignUpFormState {
+	errors: {
+		email?: string[];
+		password?: string[];
+		confirmPassword?: string[];
+	};
+}
+
 // Validate fields on sign up
-export async function validateSignUp(formData: FormData) {
+export async function validateSignUp(
+	formState: SignUpFormState,
+	formData: FormData
+): Promise<SignUpFormState> {
 	console.log(`In validate sign up`);
 	console.log(`Email: ${formData.get("email")}`);
 	console.log(`Password: ${formData.get("password")}`);
@@ -62,12 +76,11 @@ export async function validateSignUp(formData: FormData) {
 	}
 
 	const data = parsedData.data;
-	const dateJoined = new Date().toISOString().split("T")[0];
+	const dateJoined = new Date().toISOString();
 	const distanceMetric = "kilometers";
 	const weightMetric = "kilograms";
 	const totalWorkouts = 0;
 	const ptWorkouts = [""];
-
 	const Exercises = [""];
 	console.log(`Email: ${data.email}`);
 	console.log(`Password: ${data.password}`);
@@ -84,11 +97,26 @@ export async function validateSignUp(formData: FormData) {
 			},
 		});
 		console.log(`New User: ${newUser}`);
-		return { redirect: true };
-	} catch (error) {
-		console.error("Failed to create user:", error);
-		return { errors: { email: ["Email already in use"] } };
+	} catch (error: unknown) {
+		console.log("Here's the issue from prisma: ", error);
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			return {
+				errors: {
+					email: ["This email already exists. Did you forget your password?"],
+				},
+			};
+		}
+		console.error("Something else went wrong", error);
+		return {
+			errors: {
+				email: [
+					"We appear to be having some difficulty. Please reach out to the dev to fix this bug.",
+				],
+			},
+		};
+		throw new Error("Failed to create a new user.");
 	}
+	redirect("/login");
 }
 
 export async function addExercise(
