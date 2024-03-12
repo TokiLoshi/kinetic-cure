@@ -64,6 +64,7 @@ model Exercises {
   authorId         Int
   author           User                  @relation(fields: [authorId], references: [id])
   description      String
+  equipment        String
   muscleGroups     ExerciseMuscleGroup[]
   videoLink        String
   workoutExercises WorkoutExercise[]

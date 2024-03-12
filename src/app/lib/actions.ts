@@ -63,6 +63,7 @@ export async function validateSignUp(
 	console.log(`Email: ${formData.get("email")}`);
 	console.log(`Password: ${formData.get("password")}`);
 	console.log(`Confirmation: ${formData.get("confirmPassword")}`);
+	
 	const parsedData = SignUpSchema.safeParse({
 		email: formData.get("email"),
 		password: formData.get("password"),
@@ -119,22 +120,79 @@ export async function validateSignUp(
 	redirect("/login");
 }
 
+const ExerciseSchema = z.object({
+	name: z.string({ invalid_type_error: "Please create a name" }),
+	description: z.string({ invalid_type_error: "Please add a description" }),
+	muscleGroups: z.string({ invalid_type_error: "Please add muscle groups" }),
+	equipment: z.string({ invalid_type_error: "Please add equipment" }),
+	videoLink: z.string({ invalid_type_error: "Please enter correct url format" }),
+});
+
+interface ExerciseFormState {
+	errors: {
+		name?: string[];
+		description?: string[];
+		muscleGroups?: string[];
+		equipment?: string[];
+		videoLink?: string[];
+	}
+}
+
 export async function addExercise(
-	prevState: string | undefined,
+	formState: ExerciseFormState,
 	formData: FormData
-) {
-	const exerciseSchema = z.object({
-		name: z.string({ invalid_type_error: "Please create a name" }),
-		description: z.string({ invalid_type_error: "Please add a description" }),
-		videoLink: z.string({
-			invalid_type_error: "Please enter correct url format",
-		}),
-	});
-	const validatedFields = exerciseSchema.safeParse({
+): Promise<ExerciseFormState> {
+	console.log(`Adding in an exercise, formData`)
+	console.log(`Name: ${formData.get("name")}`);
+	console.log(`Description: ${formData.get("description")}`);
+	console.log(`Muscle Groups: ${formData.get("muscleGroups")}`);
+	console.log(`Equipment: ${formData.get("equipment")}`);
+	console.log(`Video Link: ${formData.get("videoLink")}`);
+	
+	const validatedFields = ExerciseSchema.safeParse({
 		name: formData.get("name"),
 		description: formData.get("description"),
+		muscleGroups: formData.get("muscleGroups"),
+		equipment: formData.get("equipment"),
 		videoLink: formData.get("videoLink"),
 	});
 	console.log(validatedFields.success);
 	console.log(validatedFields);
+
+	if (!validatedFields.success) {
+		const errors = validatedFields.error.flatten().fieldErrors;
+		return { errors };
+	}
+	const { name, description, muscleGroups, equipment, videoLink} = validatedFields.data;
+	const authorId = 1;
+	try {
+		const newExercise = await prisma.exercises.create({
+			data: {
+				name,
+				author: {
+					connect: {
+						id: authorId,
+					 					},
+				},
+				description,
+				equipment,
+				videoLink,
+				muscleGroups: {
+					connect: {
+						id: muscleGroups[0],
+					},
+				}
+			}
+			});
+	} catch (error: unknown) {
+		console.log(error);
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			return {
+				errors: {
+					name: ["This exercise already exists. Please try again."],
+				},
+			};
+		}
+	}
+	redirect("/dashboard");
 }
