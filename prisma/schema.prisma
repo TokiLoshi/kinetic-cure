@@ -52,12 +52,6 @@ model PTWorkouts {
   PTWorkoutExercise PTWorkoutExercise[]
 }
 
-model MuscleGroup {
-  id        Int                   @id @default(autoincrement())
-  name      String                @unique
-  exercises ExerciseMuscleGroup[]
-}
-
 model Exercises {
   id               Int                   @id @default(autoincrement())
   name             String                @unique
@@ -71,16 +65,17 @@ model Exercises {
 }
 
 model PTExercises {
-  id                 Int                   @id @default(autoincrement())
-  ptWorkoutId        Int
-  ptExerciseId       Int
-  ptWorkout          PTWorkouts            @relation(fields: [ptWorkoutId], references: [id])
-  description        String
-  muscleGroup        ExerciseMuscleGroup[]
-  videoLink          String
-  ptWorkoutExercises PTWorkoutExercise[]
-  User               User?                 @relation(fields: [userId], references: [id])
-  userId             Int?
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  authorId          Int
+  author            User                @relation(fields: [authorId], references: [id])
+  description       String
+  equipment         String
+  muscleGroups      PTMuscleGroup[]
+  videoLink         String
+  pTWorkoutExercise PTWorkoutExercise[]
+  PTWorkouts        PTWorkouts?         @relation(fields: [pTWorkoutsId], references: [id])
+  pTWorkoutsId      Int?
 }
 
 model WorkoutExercise {
@@ -101,18 +96,6 @@ model PTWorkoutExercise {
   @@id([ptWorkoutId, ptExerciseId])
 }
 
-model ExerciseMuscleGroup {
-  muscleGroupId Int
-  exerciseId    Int
-  ptExerciseId  Int
-  exercise      Exercises    @relation(fields: [exerciseId], references: [id])
-  muscleGroup   MuscleGroup  @relation(fields: [muscleGroupId], references: [id])
-  PTExercises   PTExercises? @relation(fields: [pTExercisesId], references: [id])
-  pTExercisesId Int?
-
-  @@id([exerciseId, muscleGroupId])
-}
-
 model PersonalRecords {
   id        Int   @id @default(autoincrement())
   athleteId Int
@@ -120,4 +103,48 @@ model PersonalRecords {
   reps      Int
   distance  Float
   weight    Float
+}
+
+model ExerciseMuscleGroup {
+  id         Int       @id @default(autoincrement())
+  exerciseId Int
+  exercise   Exercises @relation(fields: [exerciseId], references: [id])
+  Glutes     Boolean   @default(false)
+  Hamstrings Boolean   @default(false)
+  Quads      Boolean   @default(false)
+  Hips       Boolean   @default(false)
+  Core       Boolean   @default(false)
+  Chest      Boolean   @default(false)
+  Shoulders  Boolean   @default(false)
+  MidBack    Boolean   @default(false)
+  UpperBack  Boolean   @default(false)
+  LowerBack  Boolean   @default(false)
+  Obliques   Boolean   @default(false)
+  Triceps    Boolean   @default(false)
+  Biceps     Boolean   @default(false)
+  Delts      Boolean   @default(false)
+  Lats       Boolean   @default(false)
+  Traps      Boolean   @default(false)
+}
+
+model PTMuscleGroup {
+  id           Int         @id @default(autoincrement())
+  PTexerciseId Int
+  PTexercise   PTExercises @relation(fields: [PTexerciseId], references: [id])
+  Glutes       Boolean     @default(false)
+  Hamstrings   Boolean     @default(false)
+  Quads        Boolean     @default(false)
+  Hips         Boolean     @default(false)
+  Core         Boolean     @default(false)
+  Chest        Boolean     @default(false)
+  Shoulders    Boolean     @default(false)
+  MidBack      Boolean     @default(false)
+  UpperBack    Boolean     @default(false)
+  LowerBack    Boolean     @default(false)
+  Obliques     Boolean     @default(false)
+  Triceps      Boolean     @default(false)
+  Biceps       Boolean     @default(false)
+  Delts        Boolean     @default(false)
+  Lats         Boolean     @default(false)
+  Traps        Boolean     @default(false)
 }
