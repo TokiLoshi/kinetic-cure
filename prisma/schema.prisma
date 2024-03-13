@@ -109,6 +109,7 @@ model ExerciseMuscleGroup {
   id         Int       @id @default(autoincrement())
   exerciseId Int
   exercise   Exercises @relation(fields: [exerciseId], references: [id])
+  Calves     Boolean   @default(false)
   Glutes     Boolean   @default(false)
   Hamstrings Boolean   @default(false)
   Quads      Boolean   @default(false)
@@ -131,6 +132,7 @@ model PTMuscleGroup {
   id           Int         @id @default(autoincrement())
   PTexerciseId Int
   PTexercise   PTExercises @relation(fields: [PTexerciseId], references: [id])
+  Calves       Boolean     @default(false)
   Glutes       Boolean     @default(false)
   Hamstrings   Boolean     @default(false)
   Quads        Boolean     @default(false)
