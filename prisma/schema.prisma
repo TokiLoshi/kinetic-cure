@@ -19,134 +19,83 @@ model User {
   password        String
   name            String?
   dateJoined      DateTime
-  workouts        Workouts[]
-  ptExercises     PTExercises[]
-  personalRecords PersonalRecords[]
   distanceMetric  String
   weightMetric    String
   totalWorkouts   Int
-  PTWorkouts      PTWorkouts[]
+  Workouts        Workouts[]
   Exercises       Exercises[]
+  PersonalRecords PersonalRecords[]
 }
 
 model Workouts {
-  id               Int               @id @default(autoincrement())
-  athleteId        Int
-  athlete          User              @relation(fields: [athleteId], references: [id])
-  dateCompleted    DateTime
-  notes            String
-  personalRecord   Boolean
-  distance         Float
-  workoutExercises WorkoutExercise[]
-}
-
-model PTWorkouts {
-  id                Int                 @id @default(autoincrement())
-  athleteId         Int
-  athlete           User                @relation(fields: [athleteId], references: [id])
-  dateCompleted     DateTime
-  notes             String
-  reps              Int
-  frequency         Int
-  PTExercises       PTExercises[]
-  PTWorkoutExercise PTWorkoutExercise[]
+  id                   Int                    @id @default(autoincrement())
+  athleteId            Int
+  athlete              User                   @relation(fields: [athleteId], references: [id])
+  dateCompleted        DateTime
+  notes                String
+  personalRecord       Boolean
+  distance             Float
+  reps                 Int
+  sets                 Int
+  exercises            Exercises[]
+  WorkoutExerciseGroup WorkoutExerciseGroup[]
 }
 
 model Exercises {
-  id               Int                   @id @default(autoincrement())
-  name             String                @unique
-  authorId         Int
-  author           User                  @relation(fields: [authorId], references: [id])
-  description      String
-  equipment        String
-  muscleGroups     ExerciseMuscleGroup[]
-  videoLink        String
-  workoutExercises WorkoutExercise[]
+  id                   Int                    @id @default(autoincrement())
+  name                 String                 @unique
+  type                 ExerciseType           @default(REGULAR)
+  authorId             Int
+  author               User                   @relation(fields: [authorId], references: [id])
+  description          String
+  equipment            String
+  muscleGroups         MuscleGroup[]
+  videoLink            String
+  exerciseType         ExerciseType
+  PersonalRecords      PersonalRecords[]
+  ExerciseMuscleGroup  ExerciseMuscleGroup[]
+  WorkoutExerciseGroup WorkoutExerciseGroup[]
+  Workouts             Workouts?              @relation(fields: [workoutsId], references: [id])
+  workoutsId           Int?
 }
 
-model PTExercises {
-  id                Int                 @id @default(autoincrement())
-  name              String              @unique
-  authorId          Int
-  author            User                @relation(fields: [authorId], references: [id])
-  description       String
-  equipment         String
-  muscleGroups      PTMuscleGroup[]
-  videoLink         String
-  pTWorkoutExercise PTWorkoutExercise[]
-  PTWorkouts        PTWorkouts?         @relation(fields: [pTWorkoutsId], references: [id])
-  pTWorkoutsId      Int?
-}
-
-model WorkoutExercise {
-  workoutId  Int
-  exerciseId Int
-  workout    Workouts  @relation(fields: [workoutId], references: [id])
-  exercise   Exercises @relation(fields: [exerciseId], references: [id])
-
-  @@id([workoutId, exerciseId])
-}
-
-model PTWorkoutExercise {
-  ptWorkoutId  Int
-  ptExerciseId Int
-  ptWorkout    PTWorkouts  @relation(fields: [ptWorkoutId], references: [id])
-  ptExercise   PTExercises @relation(fields: [ptExerciseId], references: [id])
-
-  @@id([ptWorkoutId, ptExerciseId])
+enum ExerciseType {
+  REGULAR
+  PT
 }
 
 model PersonalRecords {
-  id        Int   @id @default(autoincrement())
-  athleteId Int
-  athlete   User  @relation(fields: [athleteId], references: [id])
-  reps      Int
-  distance  Float
-  weight    Float
+  id         Int       @id @default(autoincrement())
+  athleteId  Int
+  athlete    User      @relation(fields: [athleteId], references: [id])
+  exerciseId Int
+  exercise   Exercises @relation(fields: [exerciseId], references: [id])
+  reps       Int
+  distance   Float
+  weight     Float
+}
+
+model MuscleGroup {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  exercises           Exercises[]
+  ExerciseMuscleGroup ExerciseMuscleGroup[]
 }
 
 model ExerciseMuscleGroup {
-  id         Int       @id @default(autoincrement())
-  exerciseId Int
-  exercise   Exercises @relation(fields: [exerciseId], references: [id])
-  Calves     Boolean   @default(false)
-  Glutes     Boolean   @default(false)
-  Hamstrings Boolean   @default(false)
-  Quads      Boolean   @default(false)
-  Hips       Boolean   @default(false)
-  Core       Boolean   @default(false)
-  Chest      Boolean   @default(false)
-  Shoulders  Boolean   @default(false)
-  MidBack    Boolean   @default(false)
-  UpperBack  Boolean   @default(false)
-  LowerBack  Boolean   @default(false)
-  Obliques   Boolean   @default(false)
-  Triceps    Boolean   @default(false)
-  Biceps     Boolean   @default(false)
-  Delts      Boolean   @default(false)
-  Lats       Boolean   @default(false)
-  Traps      Boolean   @default(false)
+  exerciseId    Int
+  muscleGroupId Int
+  exercise      Exercises   @relation(fields: [exerciseId], references: [id])
+  muscleGroup   MuscleGroup @relation(fields: [muscleGroupId], references: [id])
+
+  @@id([exerciseId, muscleGroupId])
 }
 
-model PTMuscleGroup {
-  id           Int         @id @default(autoincrement())
-  PTexerciseId Int
-  PTexercise   PTExercises @relation(fields: [PTexerciseId], references: [id])
-  Calves       Boolean     @default(false)
-  Glutes       Boolean     @default(false)
-  Hamstrings   Boolean     @default(false)
-  Quads        Boolean     @default(false)
-  Hips         Boolean     @default(false)
-  Core         Boolean     @default(false)
-  Chest        Boolean     @default(false)
-  Shoulders    Boolean     @default(false)
-  MidBack      Boolean     @default(false)
-  UpperBack    Boolean     @default(false)
-  LowerBack    Boolean     @default(false)
-  Obliques     Boolean     @default(false)
-  Triceps      Boolean     @default(false)
-  Biceps       Boolean     @default(false)
-  Delts        Boolean     @default(false)
-  Lats         Boolean     @default(false)
-  Traps        Boolean     @default(false)
+model WorkoutExerciseGroup {
+  exerciseId    Int
+  workoutId     Int
+  exerciseGroup Exercises @relation(fields: [exerciseId], references: [id])
+  workout       Workouts  @relation(fields: [workoutId], references: [id])
+
+  @@id([exerciseId, workoutId])
 }

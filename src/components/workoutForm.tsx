@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
 type MuscleGroup =
@@ -54,9 +54,9 @@ const MuscleGroupCheckboxes: React.FC<MuscleGroupCheckboxesProps> = ({
 }) => {
 	const [selectedMuscleGroups, setSelectedMuscleGroups] =
 		useState<MuscleGroupsState>({});
-	console.log(`Selected muscle groups: ${selectedMuscleGroups}`);
 
 	const handleCheckboxChange = (muscleGroup: MuscleGroup) => {
+		console.log(`In handleCheckboxChange and muscleGroup is: ${muscleGroup}`);
 		const isSelected = !selectedMuscleGroups[muscleGroup];
 		setSelectedMuscleGroups((prev) => {
 			const newState: MuscleGroupsState = {
@@ -76,10 +76,10 @@ const MuscleGroupCheckboxes: React.FC<MuscleGroupCheckboxesProps> = ({
 				<label key={muscleGroup}>
 					<input
 						className='p-2'
-						name='muscleGroups'
 						type='checkbox'
 						checked={selectedMuscleGroups[muscleGroup] || false}
 						onChange={() => handleCheckboxChange(muscleGroup)}
+						value={muscleGroup}
 					/>
 					{muscleGroup}
 				</label>
@@ -94,6 +94,7 @@ interface formErrors {
 	muscleGroups?: [];
 	equipment?: [];
 	videoLink?: [];
+	exerciseType?: [];
 }
 
 interface formState {
@@ -108,6 +109,7 @@ interface WorkoutFormProps {
 		muscleGroups: string[];
 		equipment: string;
 		videoLink: string;
+		exerciseType: string;
 	};
 }
 
@@ -125,6 +127,12 @@ export default function WorkoutForm({
 			.filter(([_, isSelected]) => isSelected)
 			.map(([muscleGroup]) => muscleGroup)
 	);
+	const [exerciseType, setExerciseType] = useState("");
+
+	const updateType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setExerciseType(e.target.value);
+		console.log(`Exercise Type: ${exerciseType}`);
+	};
 
 	const handleMuscleGroupsChange = (
 		muscleGroup: MuscleGroup,
@@ -134,10 +142,11 @@ export default function WorkoutForm({
 			...prevSelectedMuscleGroups,
 			[muscleGroup]: isSelected,
 		}));
-		console.log(
-			`In WorkoutForm and updating new state: ${selectedMuscleGroups}`
-		);
 	};
+
+	// QUESTION:
+	// Is this even necessary? Why do I have this?
+	useEffect(() => {}, [selectedMuscleGroups]);
 
 	console.log(`Here's what we'll pass to the server: ${selectedMuscleGroups}`);
 
@@ -205,7 +214,13 @@ export default function WorkoutForm({
 						</div>
 						<div className='md:w-2/3'></div>
 						<MuscleGroupCheckboxes
-							onMuscleGroupsChange={() => handleMuscleGroupsChange}
+							onMuscleGroupsChange={handleMuscleGroupsChange}
+						/>
+						<input
+							type='hidden'
+							name='muscleGroups'
+							value={serializedMuscleGroups}
+							readOnly
 						/>
 						{formState.errors?.muscleGroups && (
 							<p className='text-red-500 text-xs italic'>
@@ -253,6 +268,24 @@ export default function WorkoutForm({
 								type='text'
 								id='videoLink'
 							/>
+						</div>
+					</div>
+					<div>
+						<div className='md:flex md:items-center mb-6'>
+							<div className='md:w-1/3'>
+								<label className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+									Exercise Type
+								</label>
+							</div>
+						</div>
+						<div className='md:w-2/3'>
+							<select name='selectedExercise' onChange={updateType}>
+								<option value='' disabled>
+									Pick one
+								</option>
+								<option value='regular'>Strength / Cardio</option>
+								<option value='physio'>Physio</option>
+							</select>
 						</div>
 					</div>
 				</div>

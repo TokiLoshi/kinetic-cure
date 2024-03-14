@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { signIn } from "../../../auth";
 import { AuthError } from "next-auth";
-
+import bcrypt from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
 
@@ -83,6 +83,7 @@ export async function validateSignUp(
 	const totalWorkouts = 0;
 	const ptWorkouts = [""];
 	const Exercises = [""];
+	const personalRecords = 0;
 	console.log(`Email: ${data.email}`);
 	console.log(`Password: ${data.password}`);
 	const { email, password } = parsedData.data;
@@ -91,6 +92,7 @@ export async function validateSignUp(
 		const newUser = await prisma.user.create({
 			data: {
 				email,
+				password,
 				dateJoined,
 				distanceMetric,
 				weightMetric,
@@ -152,6 +154,7 @@ interface ExerciseFormState {
 		muscleGroups?: string[];
 		equipment?: string[];
 		videoLink?: string[];
+		exerciseType?: string[];
 	};
 }
 
@@ -162,12 +165,32 @@ export async function addExercise(
 	console.log(`Adding in an exercise, formData`);
 	console.log(`Name: ${formData.get("name")}`);
 	console.log(`Description: ${formData.get("description")}`);
-	console.log(`Muscle Groups: ${formData.get("muscleGroups")}`);
 	console.log(`Equipment: ${formData.get("equipment")}`);
-	console.log(`Video Link: ${formData.get("videoLink")}`);
+	console.log(`Video link: ${formData.get("videoLink")}`);
+	console.log(`Exercise Type: ${formData.get("selectedExercise")}`);
 
-	const allMuscles = formData.get("muscleGroups");
-	console.log(allMuscles);
+	const muscleGroupsData = formData.get("muscleGroups");
+	console.log(
+		"Muscle data from the form: ",
+		muscleGroupsData,
+		typeof muscleGroupsData
+	);
+	let selectedMuscleGroups: string[] = [];
+	if (typeof muscleGroupsData === "string" && muscleGroupsData) {
+		try {
+			selectedMuscleGroups = JSON.parse(muscleGroupsData);
+			console.log("Post parsing: ", selectedMuscleGroups);
+		} catch (error) {
+			console.warn("Error - failed to deserialize muscle data", error);
+		}
+	}
+	if (muscleGroupsData === null) {
+		return {
+			errors: {
+				muscleGroups: ["Please select at least one muscle group"],
+			},
+		};
+	}
 
 	const validatedFields = ExerciseSchema.safeParse({
 		name: formData.get("name"),
@@ -183,36 +206,13 @@ export async function addExercise(
 		return { errors };
 	}
 	const { name, description, equipment, videoLink } = validatedFields.data;
-	const authorId = 1;
-	const muscleGroupBooleans = {
-		glutes: formData.get("glutes") == "true",
-		hamstrings: formData.get("hamstrings") == "true",
-		quads: formData.get("quads") == "true",
-		hips: formData.get("hips") == "true",
-		core: formData.get("core") == "true",
-		chest: formData.get("chest") == "true",
-		shoulders: formData.get("shoulders") == "true",
-		midback: formData.get("midback") == "true",
-		upperback: formData.get("upperback") == "true",
-		lowerback: formData.get("lowerback") == "true",
-		obliques: formData.get("obliques") == "true",
-		triceps: formData.get("triceps") == "true",
-		biceps: formData.get("biceps") == "true",
-		delts: formData.get("delts") == "true",
-		lats: formData.get("lats") == "true",
-		traps: formData.get("traps") == "true",
+	const authorId = 20;
+	return {
+		errors: {
+			muscleGroups: ["something went wrong"],
+		},
 	};
-	console.log("Muscle booleans: ", muscleGroupBooleans);
-	const isAnyMuscleGroupSelected = Object.values(muscleGroupBooleans).some(
-		(value) => value
-	);
-	if (!isAnyMuscleGroupSelected) {
-		return {
-			errors: {
-				muscleGroups: ["at least one muscle group must be selected"],
-			},
-		};
-	}
+
 	try {
 		const newExercise = await prisma.exercises.create({
 			data: {
@@ -226,9 +226,7 @@ export async function addExercise(
 				equipment,
 				videoLink,
 				muscleGroups: {
-					connect: {
-						id: muscleGroups[0],
-					},
+					connect: muscleGroupsData,
 				},
 			},
 		});
