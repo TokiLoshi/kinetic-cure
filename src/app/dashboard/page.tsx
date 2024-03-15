@@ -1,8 +1,22 @@
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
+import { PrismaClient } from "@prisma/client";
 
-export default function Page() {
+async function getData() {
+	const prisma = new PrismaClient();
+	const res = await prisma.user.findUnique({
+		where: {
+			id: 21,
+		},
+	});
+	console.log(`Res: ${res?.name}`);
+}
+
+export default async function Page() {
+	const data = await getData();
+	console.log("data: ", data);
+
 	return (
 		<>
 			<NavBar />

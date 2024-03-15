@@ -122,6 +122,11 @@ export async function validateSignUp(
 	redirect("/login");
 }
 
+enum ExerciseTypeEnum {
+	REGULAR = "REGULAR",
+	PT = "PT",
+}
+
 const ExerciseSchema = z.object({
 	name: z.string({ invalid_type_error: "Please create a name" }),
 	description: z.string({ invalid_type_error: "Please add a description" }),
@@ -129,22 +134,10 @@ const ExerciseSchema = z.object({
 	videoLink: z.string({
 		invalid_type_error: "Please enter correct url format",
 	}),
-	// glutes: z.boolean(),
-	// hamstrings: z.boolean(),
-	// quads: z.boolean(),
-	// hips: z.boolean(),
-	// core: z.boolean(),
-	// chest: z.boolean(),
-	// shoulders: z.boolean(),
-	// midback: z.boolean(),
-	// upperback: z.boolean(),
-	// lowerback: z.boolean(),
-	// obliques: z.boolean(),
-	// triceps: z.boolean(),
-	// biceps: z.boolean(),
-	// delts: z.boolean(),
-	// lats: z.boolean(),
-	// traps: z.boolean(),
+	muscleGroups: z.array(
+		z.string({ invalid_type_error: "Please select a valid muscle group" })
+	),
+	exerciseType: z.nativeEnum(ExerciseTypeEnum),
 });
 
 interface ExerciseFormState {
@@ -184,7 +177,13 @@ export async function addExercise(
 			console.warn("Error - failed to deserialize muscle data", error);
 		}
 	}
-	if (muscleGroupsData === null) {
+	console.log(
+		`Selected MuscleGroups: ${selectedMuscleGroups} length: ${
+			selectedMuscleGroups.length
+		} type: ${typeof selectedMuscleGroups}`
+	);
+	if (selectedMuscleGroups.length === 0) {
+		console.log("No muscle Groups");
 		return {
 			errors: {
 				muscleGroups: ["Please select at least one muscle group"],
@@ -192,11 +191,15 @@ export async function addExercise(
 		};
 	}
 
+	const exerciseTypeClientValue = formData.get("selectedExercise");
+
 	const validatedFields = ExerciseSchema.safeParse({
 		name: formData.get("name"),
 		description: formData.get("description"),
 		equipment: formData.get("equipment"),
 		videoLink: formData.get("videoLink"),
+		muscleGroups: selectedMuscleGroups,
+		exerciseType: exerciseTypeClientValue,
 	});
 	console.log(validatedFields.success);
 	console.log(validatedFields);
@@ -205,28 +208,47 @@ export async function addExercise(
 		const errors = validatedFields.error.flatten().fieldErrors;
 		return { errors };
 	}
-	const { name, description, equipment, videoLink } = validatedFields.data;
-	const authorId = 20;
-	return {
+	// Get ids associated with the muscle group names
+	const muscleGroupIds = await Promise.all(
+		selectedMuscleGroups.map(async (groupName) => {
+			const muscleGroup = await prisma.muscleGroup.findUnique({
+				where: { name: groupName },
+			});
+			return muscleGroup ? muscleGroup.id : null;
+		})
+	);
+
+	const {
+		name,
+		description,
+		equipment,
+		videoLink,
+		muscleGroups,
+		exerciseType,
+	} = validatedFields.data;
+	const authorId = 21;
+
+	if (!exerciseType) {
 		errors: {
-			muscleGroups: ["something went wrong"],
-		},
-	};
+			selectedExercise: ["Invalid exercise type provided"];
+		}
+	}
 
 	try {
 		const newExercise = await prisma.exercises.create({
 			data: {
 				name,
 				author: {
-					connect: {
-						id: authorId,
-					},
+					connect: { id: authorId },
 				},
 				description,
 				equipment,
 				videoLink,
+				exerciseType,
 				muscleGroups: {
-					connect: muscleGroupsData,
+					connect: muscleGroupIds
+						.filter((id): id is number => id !== null)
+						.map((id) => ({ id })),
 				},
 			},
 		});
