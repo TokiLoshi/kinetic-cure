@@ -2,21 +2,32 @@ import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
+import WorkoutForm from "@/components/workoutForm";
+import { editExercise, deleteExercise } from "@/app/lib/actions";
 
-async function getData() {
-	const prisma = new PrismaClient();
-	const res = await prisma.user.findUnique({
+const prisma = new PrismaClient();
+
+async function getExercises() {
+	const result = await prisma.exercises.findMany();
+	console.log(result);
+	const exercise = result[0];
+	const muscleGroup = await getMuscleGroups(exercise.id);
+	const exerciseMuscleGroups = { exercise: result, muscleGroup };
+	return exerciseMuscleGroups;
+}
+
+async function getMuscleGroups(exerciseId: number | undefined = undefined) {
+	const muscleGroups = await prisma.exerciseMuscleGroup.findMany({
 		where: {
-			id: 21,
+			exerciseId: exerciseId,
 		},
 	});
-	console.log(`Res: ${res?.name}`);
+	return muscleGroups;
 }
 
 export default async function Page() {
-	const data = await getData();
-	console.log("data: ", data);
-
+	const exercises = await getExercises();
+	console.log(`Exercises in main: ${exercises}`);
 	return (
 		<>
 			<NavBar />
@@ -39,6 +50,39 @@ export default async function Page() {
 						Add Workout
 					</Link>
 				</button>
+			</div>
+			<div>
+				{exercises.exercise.map((item) => {
+					return (
+						<div key={item.id} className='flex m-2 p-2 text-center'>
+							<h2>{item.name}</h2>
+							<p>{item.description}</p>
+							<WorkoutForm
+								formAction={editExercise}
+								initialData={{
+									name: item.name,
+									description: item.description,
+									muscleGroups: exercises.muscleGroup,
+									equipment: item.equipment,
+									videoLink: item.videoLink,
+									exerciseType: item.exerciseType,
+								}}
+							/>
+							<form
+								formAction={deleteExercise}
+								initialData={{
+									name: exercise.name,
+									description: exercise.description,
+									muscleGroups: exercise.muscleGroups,
+									equipment: exercise.equipment,
+									videoLink: exercise.videoLink,
+									exerciseType: exercise.exerciseType,
+								}}>
+								<button>Delete</button>
+							</form>
+						</div>
+					);
+				})}
 			</div>
 			<Footer />
 		</>

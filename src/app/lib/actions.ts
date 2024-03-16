@@ -155,7 +155,7 @@ export async function addExercise(
 	formState: ExerciseFormState,
 	formData: FormData
 ): Promise<ExerciseFormState> {
-	console.log(`Adding in an exercise, formData`);
+	console.log(`Adding in an exercise, ${formData}`);
 	console.log(`Name: ${formData.get("name")}`);
 	console.log(`Description: ${formData.get("description")}`);
 	console.log(`Equipment: ${formData.get("equipment")}`);
@@ -262,5 +262,130 @@ export async function addExercise(
 			};
 		}
 	}
+	redirect("/dashboard");
+}
+
+export async function editExercise(
+	formState: ExerciseFormState,
+	formData: FormData
+): Promise<ExerciseFormState> {
+	console.log(`Editing an exercise, ${formData}`);
+	console.log(`Name: ${formData.get("name")}`);
+	console.log(`Description: ${formData.get("description")}`);
+	console.log(`Equipment: ${formData.get("equipment")}`);
+	console.log(`Video Link: ${formData.get("videoLink")}`);
+	console.log(`Exercise Type: ${formData.get("selectedExercise")}`);
+
+	const muscleGroupsData = formData.get("muscleGroups");
+	console.log(
+		`Muscle group data from the form: ${muscleGroupsData}, type: ${muscleGroupsData}`
+	);
+	let selectedMuscleGroups: string[] = [];
+	if (typeof muscleGroupsData === "string" && muscleGroupsData) {
+		try {
+			selectedMuscleGroups = JSON.parse(muscleGroupsData);
+			console.log(`Post parsing: ${selectedMuscleGroups}`);
+		} catch (error) {
+			console.warn(`Error - failed to deserialize muscle groups: ${error}`);
+		}
+	}
+	console.log(
+		`Length of selected muscle groups: ${selectedMuscleGroups} is ${selectedMuscleGroups.length}`
+	);
+	if (selectedMuscleGroups.length === 0) {
+		return {
+			errors: {
+				muscleGroups: ["Please select at least one muscle group"],
+			},
+		};
+	}
+	const exerciseTypeClientValue = formData.get("selectedExercise");
+	const validatedFields = ExerciseSchema.safeParse({
+		name: formData.get("name"),
+		description: formData.get("description"),
+		equipment: formData.get("equipment"),
+		videoLink: formData.get("videoLink"),
+		muscleGroups: selectedMuscleGroups,
+		exerciseType: exerciseTypeClientValue,
+	});
+	console.log(validatedFields.success);
+	console.log(validatedFields);
+
+	if (!validatedFields.success) {
+		const errors = validatedFields.error.flatten().fieldErrors;
+		return { errors };
+	}
+
+	const muscleGroupIds = await Promise.all(
+		selectedMuscleGroups.map(async (groupName) => {
+			const muscleGroup = await prisma.muscleGroup.findUnique({
+				where: { name: groupName },
+			});
+			return muscleGroup ? muscleGroup.id : null;
+		})
+	);
+
+	const {
+		name,
+		description,
+		equipment,
+		videoLink,
+		muscleGroups,
+		exerciseType,
+	} = validatedFields.data;
+	const authorId = 21;
+	if (!exerciseType) {
+		errors: {
+			selectedExercise: ["Invalid exercise type provided"];
+		}
+	}
+
+	const exerciseId = await prisma.exercises.findUnique({
+		where: {
+			name: name,
+		},
+	});
+
+	console.log(`Exercise Id from Prisma: ${exerciseId}`);
+
+	try {
+		const editedExercise = await prisma.exercises.update({
+			where: {
+				name: name,
+			},
+			data: {
+				description,
+				equipment,
+				videoLink,
+				exerciseType,
+				muscleGroups: {
+					connect: muscleGroupIds
+						.filter((id): id is number => id !== null)
+						.map((id) => ({ id })),
+				},
+			},
+		});
+	} catch (error: unknown) {
+		console.warn(error);
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			return {
+				errors: {
+					name: ["You do not have permission to edit this Exercise"],
+				},
+			};
+		}
+	}
+	redirect("/dashboard");
+}
+
+export async function deleteExercise(id: string) {
+	const exerciseId = +id;
+	console.log(`ExerciseId: ${exerciseId}`);
+	const deletedExercise = await prisma.exercises.delete({
+		where: {
+			id: exerciseId,
+		},
+	});
+	console.log(`Deleted Exercise`);
 	redirect("/dashboard");
 }
