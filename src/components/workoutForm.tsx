@@ -282,7 +282,7 @@ export default function WorkoutForm({
 									Pick one
 								</option>
 								<option value='REGULAR'>Strength / Cardio</option>
-								<option value='PHYSIO'>Physio</option>
+								<option value='PT'>Physio</option>
 							</select>
 						</div>
 					</div>

@@ -155,19 +155,21 @@ export async function addExercise(
 	formState: ExerciseFormState,
 	formData: FormData
 ): Promise<ExerciseFormState> {
+	// Checking what we got back from the form
 	console.log(`Adding in an exercise, ${formData}`);
 	console.log(`Name: ${formData.get("name")}`);
 	console.log(`Description: ${formData.get("description")}`);
 	console.log(`Equipment: ${formData.get("equipment")}`);
 	console.log(`Video link: ${formData.get("videoLink")}`);
 	console.log(`Exercise Type: ${formData.get("selectedExercise")}`);
-
 	const muscleGroupsData = formData.get("muscleGroups");
 	console.log(
 		"Muscle data from the form: ",
 		muscleGroupsData,
 		typeof muscleGroupsData
 	);
+
+	// Creating an empty muscle group
 	let selectedMuscleGroups: string[] = [];
 	if (typeof muscleGroupsData === "string" && muscleGroupsData) {
 		try {
@@ -182,6 +184,8 @@ export async function addExercise(
 			selectedMuscleGroups.length
 		} type: ${typeof selectedMuscleGroups}`
 	);
+
+	// Check that we got a muscle group back otherwise return an error
 	if (selectedMuscleGroups.length === 0) {
 		console.log("No muscle Groups");
 		return {
@@ -191,7 +195,10 @@ export async function addExercise(
 		};
 	}
 
+	// Validate the data
 	const exerciseTypeClientValue = formData.get("selectedExercise");
+
+	console.log(`ExerciseTypeClientValue: ${exerciseTypeClientValue}`);
 
 	const validatedFields = ExerciseSchema.safeParse({
 		name: formData.get("name"),
@@ -202,8 +209,10 @@ export async function addExercise(
 		exerciseType: exerciseTypeClientValue,
 	});
 	console.log(validatedFields.success);
+
 	console.log(validatedFields);
 
+	// Return errors for invalid data
 	if (!validatedFields.success) {
 		const errors = validatedFields.error.flatten().fieldErrors;
 		return { errors };
@@ -228,12 +237,14 @@ export async function addExercise(
 	} = validatedFields.data;
 	const authorId = 21;
 
+	// Check the correct exercise type is being passed on
 	if (!exerciseType) {
 		errors: {
 			selectedExercise: ["Invalid exercise type provided"];
 		}
 	}
 
+	// Create a new exercise and muscle group join table
 	try {
 		const newExercise = await prisma.exercises.create({
 			data: {
@@ -245,10 +256,14 @@ export async function addExercise(
 				equipment,
 				videoLink,
 				exerciseType,
-				muscleGroups: {
-					connect: muscleGroupIds
+				ExerciseMuscleGroup: {
+					create: muscleGroupIds
 						.filter((id): id is number => id !== null)
-						.map((id) => ({ id })),
+						.map((muscleGroupId) => ({
+							muscleGroup: {
+								connect: { id: muscleGroupId },
+							},
+						})),
 				},
 			},
 		});
@@ -419,7 +434,7 @@ export async function deleteExercise(id: number, inViewRoute = false) {
 	}
 	console.log(`Deleted Exercise`);
 	if (inViewRoute) {
-		redirect("/");
+		redirect("/dashboard/addworkout");
 	} else {
 		redirect("/dashboard");
 	}

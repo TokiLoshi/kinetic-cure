@@ -9,34 +9,34 @@ import DeleteButton from "@/components/deletebutton";
 const prisma = new PrismaClient();
 
 async function getExercises() {
-	const exercises = await prisma.exercises.findMany();
-	return await Promise.all(
-		exercises.map(async (exercise) => {
-			const muscleGroups = await prisma.exerciseMuscleGroup.findMany({
-				where: { exerciseId: exercise.id },
-				include: { muscleGroup: true },
-			});
-			return {
-				...exercise,
-				muscleGroups: muscleGroups.map((mg) => mg.muscleGroup.name),
-			};
-		})
-	);
-}
-
-async function getServerSideProps() {
-	const exercisesWithMuscleGroups = await getExercises();
-	return {
-		props: {
-			exercisesWithMuscleGroups,
+	const exercises = await prisma.exercises.findMany({
+		include: {
+			ExerciseMuscleGroup: {
+				include: {
+					muscleGroup: true,
+				},
+			},
 		},
-	};
-	// [isHidden, setIsHidden] = useState(true);
+	});
+	return exercises.map((exercise) => {
+		const muscleGroups = exercise.ExerciseMuscleGroup.map(
+			(eg) => eg.muscleGroup.name
+		);
+		return {
+			id: exercise.id,
+			name: exercise.name,
+			description: exercise.description,
+			equipment: exercise.equipment,
+			videoLink: exercise.videoLink,
+			exerciseType: exercise.exerciseType,
+			muscleGroups,
+		};
+	});
 }
 
 export default async function Page() {
-	const exercises = await getExercises();
-	console.log(`Exercises in main: ${exercises}`);
+	let exercises = await getExercises();
+	console.log(`Exercises in main: ${Object.values(exercises)}`);
 	return (
 		<>
 			<NavBar />
@@ -61,29 +61,41 @@ export default async function Page() {
 				</button>
 			</div>
 			<div className='display-inline m-2 p3'>
-				{exercises.map((exercise) => {
-					return (
-						<div key={exercise.id} className='flex m-2 p-2 text-center'>
-							<h2>Name: {exercise.name}</h2>
-							<p>
-								<strong>Description: </strong>
-								{exercise.description}
-							</p>
-							<p>
-								<strong>Muscle Groups: </strong>
-								{exercise.muscleGroups}
-							</p>
-							<DeleteButton id={exercise.id} />
-							<div>
-								<Link
-									href={`/dashboard/editworkout/${exercise.id}`}
-									className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
-									Edit
-								</Link>
+				{exercises &&
+					exercises.map((exercise) => {
+						return (
+							<div key={exercise.id} className='flex m-2 p-2 text-center'>
+								<h2>Name: {exercise.name}</h2>
+								<p>
+									<strong>Description: </strong>
+									{exercise.description}
+								</p>
+								<p>
+									<strong>Muscle Groups: </strong>
+									{exercise.muscleGroups.join(", ")}
+								</p>
+								<p>
+									<strong>Exercise Type: </strong>
+									{exercise.exerciseType === "REGULAR"
+										? "Strength / Cardio "
+										: "Physio"}
+								</p>
+								<DeleteButton id={exercise.id} />
+								<div>
+									<Link
+										href={`/dashboard/editworkout/${exercise.id}`}
+										className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
+										Edit
+									</Link>
+								</div>
 							</div>
-						</div>
-					);
-				})}
+						);
+					})}
+				{!exercises && (
+					<p>
+						You do not have any exercises, Add a Work to start getting stronger
+					</p>
+				)}
 			</div>
 			<Footer />
 		</>
