@@ -4,25 +4,34 @@ import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
 import WorkoutForm from "@/components/workoutForm";
 import { editExercise, deleteExercise } from "@/app/lib/actions";
+import DeleteButton from "@/components/deletebutton";
 
 const prisma = new PrismaClient();
 
 async function getExercises() {
-	const result = await prisma.exercises.findMany();
-	console.log(result);
-	const exercise = result[0];
-	const muscleGroup = await getMuscleGroups(exercise.id);
-	const exerciseMuscleGroups = { exercise: result, muscleGroup };
-	return exerciseMuscleGroups;
+	const exercises = await prisma.exercises.findMany();
+	return await Promise.all(
+		exercises.map(async (exercise) => {
+			const muscleGroups = await prisma.exerciseMuscleGroup.findMany({
+				where: { exerciseId: exercise.id },
+				include: { muscleGroup: true },
+			});
+			return {
+				...exercise,
+				muscleGroups: muscleGroups.map((mg) => mg.muscleGroup.name),
+			};
+		})
+	);
 }
 
-async function getMuscleGroups(exerciseId: number | undefined = undefined) {
-	const muscleGroups = await prisma.exerciseMuscleGroup.findMany({
-		where: {
-			exerciseId: exerciseId,
+async function getServerSideProps() {
+	const exercisesWithMuscleGroups = await getExercises();
+	return {
+		props: {
+			exercisesWithMuscleGroups,
 		},
-	});
-	return muscleGroups;
+	};
+	// [isHidden, setIsHidden] = useState(true);
 }
 
 export default async function Page() {
@@ -51,35 +60,27 @@ export default async function Page() {
 					</Link>
 				</button>
 			</div>
-			<div>
-				{exercises.exercise.map((item) => {
+			<div className='display-inline m-2 p3'>
+				{exercises.map((exercise) => {
 					return (
-						<div key={item.id} className='flex m-2 p-2 text-center'>
-							<h2>{item.name}</h2>
-							<p>{item.description}</p>
-							<WorkoutForm
-								formAction={editExercise}
-								initialData={{
-									name: item.name,
-									description: item.description,
-									muscleGroups: exercises.muscleGroup,
-									equipment: item.equipment,
-									videoLink: item.videoLink,
-									exerciseType: item.exerciseType,
-								}}
-							/>
-							<form
-								formAction={deleteExercise}
-								initialData={{
-									name: exercise.name,
-									description: exercise.description,
-									muscleGroups: exercise.muscleGroups,
-									equipment: exercise.equipment,
-									videoLink: exercise.videoLink,
-									exerciseType: exercise.exerciseType,
-								}}>
-								<button>Delete</button>
-							</form>
+						<div key={exercise.id} className='flex m-2 p-2 text-center'>
+							<h2>Name: {exercise.name}</h2>
+							<p>
+								<strong>Description: </strong>
+								{exercise.description}
+							</p>
+							<p>
+								<strong>Muscle Groups: </strong>
+								{exercise.muscleGroups}
+							</p>
+							<DeleteButton id={exercise.id} />
+							<div>
+								<Link
+									href={`/dashboard/editworkout/${exercise.id}`}
+									className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
+									Edit
+								</Link>
+							</div>
 						</div>
 					);
 				})}

@@ -378,14 +378,49 @@ export async function editExercise(
 	redirect("/dashboard");
 }
 
-export async function deleteExercise(id: string) {
-	const exerciseId = +id;
-	console.log(`ExerciseId: ${exerciseId}`);
-	const deletedExercise = await prisma.exercises.delete({
+const deleteSchema = z.object({
+	id: z.number({ invalid_type_error: "Incorrect Id" }),
+});
+
+interface deleteExerciseFormState {
+	errors: {
+		id: string[];
+	};
+}
+
+export async function deleteExercise(id: number, inViewRoute = false) {
+	console.log(`id we got back: ${id} we're about to delete the PRS`);
+	if (!id) {
+		return {
+			errors: {
+				id: ["something went wrong"],
+			},
+		};
+	}
+
+	await prisma.personalRecords.deleteMany({
 		where: {
-			id: exerciseId,
+			exerciseId: id,
 		},
 	});
+	console.log("Prs deleted, on to the exercise");
+
+	const deletedExercise = await prisma.exercises.delete({
+		where: {
+			id: +id,
+		},
+	});
+	if (!deletedExercise) {
+		return {
+			errors: {
+				id: ["something went wrong"],
+			},
+		};
+	}
 	console.log(`Deleted Exercise`);
-	redirect("/dashboard");
+	if (inViewRoute) {
+		redirect("/");
+	} else {
+		redirect("/dashboard");
+	}
 }

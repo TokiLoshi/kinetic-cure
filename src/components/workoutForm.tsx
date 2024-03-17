@@ -149,13 +149,11 @@ export default function WorkoutForm({
 	useEffect(() => {}, [selectedMuscleGroups]);
 
 	console.log(`Here's what we'll pass to the server: ${selectedMuscleGroups}`);
-
+	console.log(`Form Action: ${formAction}`);
 	return (
 		<>
 			<form action={action}>
-				<h1 className='flex justify-center m-2 text-gray-500 font-bold'>
-					Add a workout
-				</h1>
+				<h1 className='flex justify-center m-2 text-gray-500 font-bold'></h1>
 				<div className='w-full max-w-md'>
 					<div className='md:flex md:items-center mb-6'>
 						<div className='md:w-1/3'>
