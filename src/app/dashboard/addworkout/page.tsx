@@ -1,7 +1,7 @@
 import { sql } from "@vercel/postgres";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import WorkoutForm from "@/components/workoutForm";
+import WorkoutForm from "@/components/WorkoutForm";
 import { addExercise } from "@/app/lib/actions";
 import { string } from "zod";
 import Navbar from "@/components/navbar";
