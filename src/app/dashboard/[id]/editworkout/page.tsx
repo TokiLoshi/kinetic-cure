@@ -41,7 +41,9 @@ async function getExercise(id: string): Promise<Exercise | null> {
 	}
 	const exerciseWithMuscleGroups = {
 		...exercise,
-		muscleGroups: exercise.ExerciseMuscleGroup.map((eg) => eg.muscleGroup.name),
+		muscleGroups: exercise.ExerciseMuscleGroup.map(
+			(eg: { muscleGroup: { name: string } }) => eg.muscleGroup.name
+		),
 	};
 	console.log(
 		`Exercise with muscle groups: ${Object.entries(exerciseWithMuscleGroups)}`
