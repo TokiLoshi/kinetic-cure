@@ -27,7 +27,7 @@ async function getExercises() {
 	});
 	return exercises.map((exercise) => {
 		const muscleGroups = exercise.ExerciseMuscleGroup.map(
-			(eg) => eg.muscleGroup.name
+			(eg: { muscleGroup: { name: string } }) => eg.muscleGroup.name
 		);
 		return {
 			id: exercise.id,
