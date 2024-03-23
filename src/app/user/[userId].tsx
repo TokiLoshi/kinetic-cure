@@ -7,7 +7,7 @@ export async function loader({ params }: { params: { userId: string } }) {
 	const { userId } = params;
 	const userWithWorkouts = await prisma.user.findUnique({
 		where: {
-			id: parseInt(userId, 21),
+			id: userId,
 		},
 		include: {
 			Workouts: true,
