@@ -9,8 +9,7 @@ import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/library"
 import { lucia, validateRequest } from "@/app/lib/auth";
 import { cookies } from "next/headers";
 import { ActionResult } from "@/app/lib/form";
-
-const prisma = new PrismaClient();
+import prisma from "@/app/lib/prisma";
 
 export async function logout(): Promise<ActionResult> {
 	const { session } = await validateRequest();

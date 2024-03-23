@@ -7,13 +7,41 @@ import { getUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import prisma from "@/app/lib/prisma";
 
 interface User {
 	user: any | null;
 	session: any | null;
+	username: any | null;
 }
 
-const prisma = new PrismaClient();
+interface MuscleGroup {
+	name: string;
+}
+
+interface ExerciseMuscleGroup {
+	muscleGroup: MuscleGroup;
+}
+
+interface Exercise {
+	id: number;
+	name: string;
+	description: string;
+	equipment: string;
+	videoLink: string;
+	exerciseType: string;
+	ExerciseMuscleGroup: ExerciseMuscleGroup[];
+}
+
+interface ProcessedExercise {
+	id: number;
+	name: string;
+	description: string;
+	equipment: string;
+	videoLink: string;
+	exerciseType: string;
+	muscleGroups: string[];
+}
 
 async function getExercises() {
 	const exercises = await prisma.exercises.findMany({
@@ -25,9 +53,9 @@ async function getExercises() {
 			},
 		},
 	});
-	return exercises.map((exercise) => {
+	return exercises.map((exercise: Exercise): ProcessedExercise => {
 		const muscleGroups = exercise.ExerciseMuscleGroup.map(
-			(eg: { muscleGroup: { name: string } }) => eg.muscleGroup.name
+			(eg) => eg.muscleGroup.name
 		);
 		return {
 			id: exercise.id,
@@ -36,7 +64,9 @@ async function getExercises() {
 			equipment: exercise.equipment,
 			videoLink: exercise.videoLink,
 			exerciseType: exercise.exerciseType,
-			muscleGroups,
+			muscleGroups: exercise.ExerciseMuscleGroup.map(
+				(emg) => emg.muscleGroup.name
+			),
 		};
 	});
 }
@@ -45,13 +75,12 @@ export default async function Page() {
 	const result = (await getUser()) as User;
 	const user = result;
 	if (!user) {
-		redirect("/login");
+		return redirect("/login");
 	}
-	const parsedUser = JSON.parse(JSON.stringify(user));
-	const { username } = parsedUser;
+	const { username } = user;
 
 	if (!username) {
-		redirect("/login");
+		return redirect("/login");
 	}
 	const { email } = username;
 	// console.log(`Object: ${username.username}`);
@@ -63,28 +92,28 @@ export default async function Page() {
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
 			<h1 className='text-center m-2 text-bold'>
-				`Welcome back what shall we do next? {email}!`
+				Welcome back what shall we do next? {email}!
 			</h1>
 
 			<div className='flex justify-center'>
 				<button className='m-2'>
 					<Link
-						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'
-						href='/dashboard/logworkout'>
+						href='/dashboard/logworkout'
+						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
 						Log Workout
 					</Link>
 				</button>
 				<button className='m-2'>
 					<Link
-						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'
-						href='/dashboard/addworkout'>
-						Add Workout
+						href='/dashboard/addworkout'
+						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
+						Add workout
 					</Link>
 				</button>
 			</div>
 			<div className='display-inline m-2 p3'>
 				{exercises &&
-					exercises.map((exercise) => {
+					exercises.map((exercise: ProcessedExercise) => {
 						return (
 							<div key={exercise.id} className='flex m-2 p-2 text-center'>
 								<h2>Name: {exercise.name}</h2>
