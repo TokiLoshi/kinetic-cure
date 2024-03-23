@@ -2,11 +2,11 @@ import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
 import WorkoutForm from "@/components/WorkoutForm";
 import { editExercise, deleteExercise } from "@/app/lib/actions";
-import DeleteButton from "@/components/deletebutton";
+import DeleteButton from "@/components/Deletebutton";
 import { getUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import prisma from "@/app/lib/prisma";
 
 interface User {

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import SignOutButton from "@/components/logout-button";
+import SignOutButton from "./LogoutButton";
 
 import { useEffect } from "react";
 

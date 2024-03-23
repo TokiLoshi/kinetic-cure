@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import WorkoutForm from "@/components/WorkoutForm";
 import { addExercise } from "@/app/lib/actions";
 import { string } from "zod";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { getUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 

@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { editExercise } from "@/app/lib/actions";
-import EditExerciseForm from "@/components/editForm";
+import EditExerciseForm from "@/components/Editform";
 
 // TO DO:
 // Make checks - users shouldn't be able to edit exercises

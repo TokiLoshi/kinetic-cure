@@ -6,8 +6,8 @@ import { Form } from "@/app/lib/form";
 import type { ActionResult } from "@/app/lib/form";
 import { redirect } from "next/navigation";
 import { getUser } from "@/app/lib/auth";
-import NavBar from "@/components/navbar";
-import Footer from "@/components/footer";
+import NavBar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
 	title: "Kinetic Cure",
