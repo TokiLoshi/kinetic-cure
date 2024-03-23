@@ -4,10 +4,31 @@ import { useRouter } from "next/navigation";
 import WorkoutForm from "@/components/workoutForm";
 import { addExercise } from "@/app/lib/actions";
 import { string } from "zod";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import { getUser } from "@/app/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+interface User {
+	user: any | null;
+	session: any | null;
+	username: any | null;
+}
+
+export default async function Page() {
+	const user = (await getUser()) as User;
+	console.log(`User in addworkout page: ${JSON.stringify(user)}`);
+	console.log(`Unpack user: ${user?.username?.email}`);
+	let isLoggedIn = false;
+	if (!user) {
+		redirect("/login");
+	}
+	if (user?.username) {
+		isLoggedIn = true;
+	}
 	return (
 		<>
+			<Navbar isLoggedIn={isLoggedIn} />
 			<div className='flex justify-center m-2'>
 				<WorkoutForm
 					formAction={addExercise}
@@ -21,6 +42,7 @@ export default function Page() {
 					}}
 				/>
 			</div>
+			<Footer />
 		</>
 	);
 }

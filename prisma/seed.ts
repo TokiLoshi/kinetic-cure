@@ -4,147 +4,147 @@ const prisma = new PrismaClient();
 
 async function main() {
 	// Seed User data:
-	// const user1 = await prisma.user.create({
-	// 	data: {
-	// 		email: "hello@prisma.io",
-	// 		password: "hashedpassword",
-	// 		name: "alice",
-	// 		dateJoined: new Date(),
-	// 		distanceMetric: "miles",
-	// 		weightMetric: "kg",
-	// 		totalWorkouts: 1,
-	// 	},
-	// });
+	const user1 = await prisma.user.create({
+		data: {
+			email: "hello@prisma.io",
+			password: "hashedpassword",
+			name: "alice",
+			dateJoined: new Date(),
+			distanceMetric: "miles",
+			weightMetric: "kg",
+			totalWorkouts: 1,
+		},
+	});
 
-	// const user2 = await prisma.user.create({
-	// 	data: {
-	// 		email: "flacor@narnia.com",
-	// 		password: "hashedpassword",
-	// 		dateJoined: new Date(),
-	// 		distanceMetric: "miles",
-	// 		weightMetric: "pounds",
-	// 		totalWorkouts: 2,
-	// 	},
-	// });
+	const user2 = await prisma.user.create({
+		data: {
+			email: "flacor@narnia.com",
+			password: "hashedpassword",
+			dateJoined: new Date(),
+			distanceMetric: "miles",
+			weightMetric: "pounds",
+			totalWorkouts: 2,
+		},
+	});
 
-	// const exercise1 = await prisma.exercises.create({
-	// 	data: {
-	// 		name: "Push-up",
-	// 		type: "REGULAR",
-	// 		authorId: user1.id,
-	// 		description: "A pushup is a common calisthenics exercises.",
-	// 		equipment: "None",
-	// 		videoLink: "https://example.com/push-up-video",
-	// 		exerciseType: "REGULAR",
-	// 	},
-	// });
+	const exercise1 = await prisma.exercises.create({
+		data: {
+			name: "Push-up",
+			type: "REGULAR",
+			authorId: user1.id,
+			description: "A pushup is a common calisthenics exercises.",
+			equipment: "None",
+			videoLink: "https://example.com/push-up-video",
+			exerciseType: "REGULAR",
+		},
+	});
 
-	// const exercise2 = await prisma.exercises.create({
-	// 	data: {
-	// 		name: "Bicep curl",
-	// 		authorId: user2.id,
-	// 		description: "Curl those biceps",
-	// 		equipment: "dumbell",
-	// 		videoLink: "https://example.com/bicep-curl",
-	// 		exerciseType: "REGULAR",
-	// 	},
-	// });
+	const exercise2 = await prisma.exercises.create({
+		data: {
+			name: "Bicep curl",
+			authorId: user2.id,
+			description: "Curl those biceps",
+			equipment: "dumbell",
+			videoLink: "https://example.com/bicep-curl",
+			exerciseType: "REGULAR",
+		},
+	});
 
-	// const exercise3 = await prisma.exercises.create({
-	// 	data: {
-	// 		name: "wall pushup",
-	// 		authorId: user2.id,
-	// 		description:
-	// 			"stand hip width apart and place hands on the wall. Sink your shoulders and then push out.",
-	// 		equipment: "none",
-	// 		videoLink: "https://example.com/wall-pushup",
-	// 		exerciseType: "PT",
-	// 	},
-	// });
+	const exercise3 = await prisma.exercises.create({
+		data: {
+			name: "wall pushup",
+			authorId: user2.id,
+			description:
+				"stand hip width apart and place hands on the wall. Sink your shoulders and then push out.",
+			equipment: "none",
+			videoLink: "https://example.com/wall-pushup",
+			exerciseType: "PT",
+		},
+	});
 
-	// const workout1 = await prisma.workouts.create({
-	// 	data: {
-	// 		athleteId: user1.id,
-	// 		dateCompleted: new Date(),
-	// 		notes: "Good to be back at it",
-	// 		personalRecord: false,
-	// 		distance: 0.0,
-	// 		reps: 20,
-	// 		sets: 3,
-	// 	},
-	// });
+	const workout1 = await prisma.workouts.create({
+		data: {
+			athleteId: user1.id,
+			dateCompleted: new Date(),
+			notes: "Good to be back at it",
+			personalRecord: false,
+			distance: 0.0,
+			reps: 20,
+			sets: 3,
+		},
+	});
 
-	// const workout2 = await prisma.workouts.create({
-	// 	data: {
-	// 		athleteId: user2.id,
-	// 		dateCompleted: new Date(),
-	// 		notes: "shouler is on the ment",
-	// 		personalRecord: true,
-	// 		distance: 0.0,
-	// 		reps: 20,
-	// 		sets: 3,
-	// 	},
-	// });
+	const workout2 = await prisma.workouts.create({
+		data: {
+			athleteId: user2.id,
+			dateCompleted: new Date(),
+			notes: "shouler is on the ment",
+			personalRecord: true,
+			distance: 0.0,
+			reps: 20,
+			sets: 3,
+		},
+	});
 
-	// const workout3 = await prisma.workouts.create({
-	// 	data: {
-	// 		athleteId: user2.id,
-	// 		dateCompleted: new Date(),
-	// 		notes: "need to do this more often",
-	// 		personalRecord: false,
-	// 		distance: 0.0,
-	// 		reps: 30,
-	// 		sets: 6,
-	// 	},
-	// });
+	const workout3 = await prisma.workouts.create({
+		data: {
+			athleteId: user2.id,
+			dateCompleted: new Date(),
+			notes: "need to do this more often",
+			personalRecord: false,
+			distance: 0.0,
+			reps: 30,
+			sets: 6,
+		},
+	});
 
-	// const muscleGroup1 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Chest",
-	// 	},
-	// });
+	const muscleGroup1 = await prisma.muscleGroup.create({
+		data: {
+			name: "Chest",
+		},
+	});
 
-	// const muscleGroup2 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Shoulders",
-	// 	},
-	// });
+	const muscleGroup2 = await prisma.muscleGroup.create({
+		data: {
+			name: "Shoulders",
+		},
+	});
 
-	// const muscleGroup3 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Triceps",
-	// 	},
-	// });
+	const muscleGroup3 = await prisma.muscleGroup.create({
+		data: {
+			name: "Triceps",
+		},
+	});
 
-	// const muscleGroup4 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Hamstrings",
-	// 	},
-	// });
+	const muscleGroup4 = await prisma.muscleGroup.create({
+		data: {
+			name: "Hamstrings",
+		},
+	});
 
-	// const muscleGroup5 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Glutes",
-	// 	},
-	// });
+	const muscleGroup5 = await prisma.muscleGroup.create({
+		data: {
+			name: "Glutes",
+		},
+	});
 
-	// const muscleGroup6 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Quads",
-	// 	},
-	// });
+	const muscleGroup6 = await prisma.muscleGroup.create({
+		data: {
+			name: "Quads",
+		},
+	});
 
-	// const muscleGroup7 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Hips",
-	// 	},
-	// });
+	const muscleGroup7 = await prisma.muscleGroup.create({
+		data: {
+			name: "Hips",
+		},
+	});
 
-	// const muscleGroup8 = await prisma.muscleGroup.create({
-	// 	data: {
-	// 		name: "Core",
-	// 	},
-	// });
+	const muscleGroup8 = await prisma.muscleGroup.create({
+		data: {
+			name: "Core",
+		},
+	});
 
 	const muscleGroup10 = await prisma.muscleGroup.create({
 		data: {

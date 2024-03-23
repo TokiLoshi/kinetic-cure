@@ -1,9 +1,19 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import SignOutButton from "@/components/logout-button";
 
-export default function Navbar() {
+import { useEffect } from "react";
+
+type NavbarProps = {
+	isLoggedIn: boolean;
+};
+
+export default function Navbar({ isLoggedIn }: NavbarProps) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	console.log(`User in navbar: ${isLoggedIn}`);
+	let loggedState = { isLoggedIn };
+	console.log(`Logged state: ${loggedState.isLoggedIn}`);
 	return (
 		<>
 			<nav className='flex items-center justify-between flex-wrap bg-zinc-800 p-6'>
@@ -55,18 +65,30 @@ export default function Navbar() {
 						<Link href='/about' className='m-2 text-white hover:text-lime-300'>
 							About
 						</Link>
-						<Link className='text-white m-2 hover:text-lime-300' href='/login'>
-							Login
-						</Link>
-						<Link className='m-2 text-white hover:text-lime-300' href='/signup'>
-							Sign up
-						</Link>
-
-						<Link
-							className='m-2 text-white hover:text-lime-300'
-							href='/dashboard'>
-							Dashboard
-						</Link>
+						{isLoggedIn && (
+							<>
+								<SignOutButton />
+								<Link
+									className='m-2 text-white hover:text-lime-300'
+									href='/dashboard'>
+									Dashboard
+								</Link>
+							</>
+						)}
+						{!isLoggedIn && (
+							<>
+								<Link
+									className='text-white m-2 hover:text-lime-300'
+									href='/login'>
+									Login
+								</Link>
+								<Link
+									className='m-2 text-white hover:text-lime-300'
+									href='/signup'>
+									Sign up
+								</Link>
+							</>
+						)}
 					</div>
 				</div>
 			</nav>

@@ -1,10 +1,17 @@
-import NavBar from "@/components/navbar";
-import Footer from "@/components/footer";
 import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
 import WorkoutForm from "@/components/workoutForm";
 import { editExercise, deleteExercise } from "@/app/lib/actions";
 import DeleteButton from "@/components/deletebutton";
+import { getUser } from "@/app/lib/auth";
+import { redirect } from "next/navigation";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+
+interface User {
+	user: any | null;
+	session: any | null;
+}
 
 const prisma = new PrismaClient();
 
@@ -35,13 +42,28 @@ async function getExercises() {
 }
 
 export default async function Page() {
+	const result = (await getUser()) as User;
+	const user = result;
+	if (!user) {
+		redirect("/login");
+	}
+	const parsedUser = JSON.parse(JSON.stringify(user));
+	const { username } = parsedUser;
+
+	if (!username) {
+		redirect("/login");
+	}
+	const { email } = username;
+	// console.log(`Object: ${username.username}`);
 	let exercises = await getExercises();
 	console.log(`Exercises in main: ${Object.values(exercises)}`);
+	let isLoggedIn = true;
+
 	return (
 		<>
-			<NavBar />
+			<Navbar isLoggedIn={isLoggedIn} />
 			<h1 className='text-center m-2 text-bold'>
-				Welcome back username, what shall we do next?
+				`Welcome back what shall we do next? {email}!`
 			</h1>
 
 			<div className='flex justify-center'>
@@ -83,7 +105,7 @@ export default async function Page() {
 								<DeleteButton id={exercise.id} />
 								<div>
 									<Link
-										href={`/dashboard/editworkout/${exercise.id}`}
+										href={`/dashboard/${exercise.id}/editworkout`}
 										className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
 										Edit
 									</Link>
