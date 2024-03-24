@@ -6,7 +6,7 @@ import { Form } from "@/app/lib/form";
 import type { ActionResult } from "@/app/lib/form";
 import { redirect } from "next/navigation";
 import { getUser } from "@/app/lib/auth";
-import NavBar from "@/components/NavBar";
+import NavBar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
