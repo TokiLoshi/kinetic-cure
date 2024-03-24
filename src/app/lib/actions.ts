@@ -5,7 +5,10 @@ import { z } from "zod";
 import { AuthError } from "next-auth";
 import bcrypt from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
+import {
+	PrismaClientUnknownRequestError,
+	PrismaClientKnownRequestError,
+} from "@prisma/client/runtime/library";
 import { lucia, validateRequest } from "@/app/lib/auth";
 import { cookies } from "next/headers";
 import { ActionResult } from "@/app/lib/form";
@@ -302,7 +305,7 @@ export async function addExercise(
 		});
 	} catch (error: unknown) {
 		console.log(error);
-		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+		if (error instanceof PrismaClientKnownRequestError) {
 			return {
 				errors: {
 					name: ["This exercise already exists. Please try again."],
