@@ -9,8 +9,8 @@ import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/library"
 import type { ActionResult } from "@/app/lib/form";
 import { Form } from "@/app/lib/form";
 import { validateRequest } from "@/app/lib/auth";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/NavBar";
+import Footer from "@/components/Footers";
 
 const prisma = new PrismaClient();
 

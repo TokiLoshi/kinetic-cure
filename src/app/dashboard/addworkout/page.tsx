@@ -1,11 +1,11 @@
 import { sql } from "@vercel/postgres";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import WorkoutForm from "@/components/ExerciseForm";
+import WorkoutForm from "@/components/ExerciseForms";
 import { addExercise } from "@/app/lib/actions";
 import { string } from "zod";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/NavBar";
+import Footer from "@/components/Footers";
 import { getUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 
