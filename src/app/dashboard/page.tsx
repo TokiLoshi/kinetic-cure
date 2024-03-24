@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
-import WorkoutForm from "@/components/WorkoutForm";
+import WorkoutForm from "@/components/ExerciseForm";
 import { editExercise, deleteExercise } from "@/app/lib/actions";
 import DeleteButton from "@/components/Deletebutton";
 import { getUser } from "@/app/lib/auth";
