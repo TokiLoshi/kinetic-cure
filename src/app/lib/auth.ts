@@ -17,7 +17,6 @@ export const lucia = new Lucia(adapter, {
 		},
 	},
 	getUserAttributes: (attributes) => {
-		console.log(`Attributes in lucia: ${attributes} `);
 		return {
 			// This should be attributes.username but Typescript won't stop yelling
 			username: attributes,
@@ -36,9 +35,9 @@ export const validateRequest = cache(
 				session: null,
 			};
 		}
-		console.log("Lucia is validating");
+
 		const result = await lucia.validateSession(sessionId);
-		console.log(`Result: ${result}`);
+
 		try {
 			if (result.session && result.session.fresh) {
 				const sessionCookie = lucia.createSessionCookie(result.session.id);
@@ -81,11 +80,11 @@ export const getUser = cache(async () => {
 		};
 	}
 	const { user, session } = await lucia.validateSession(sessionId);
-	console.log(
-		`User in Lucia: ${user} type: ${typeof user}, string ${JSON.stringify(
-			user
-		)} and session: ${session}`
-	);
+	// console.log(
+	// 	`User in Lucia: ${user} type: ${typeof user}, string ${JSON.stringify(
+	// 		user
+	// 	)} and session: ${session}`
+	// );
 	try {
 		if (session && session.fresh) {
 			const sessionCookie = lucia.createSessionCookie(session.id);
@@ -106,7 +105,7 @@ export const getUser = cache(async () => {
 	} catch {
 		// Next.js throws error when attempting to set cookies when rendering page
 	}
-	console.log(`User from Lucia in auth: ${JSON.stringify(user)}`);
+	// console.log(`User from Lucia in auth: ${JSON.stringify(user)}`);
 
 	return user;
 });

@@ -12,7 +12,7 @@ export default async function Page() {
 	console.log(`User in about page: ${JSON.stringify(user)}`);
 	console.log(`Unpack user: ${user?.user}`);
 	let isLoggedIn = false;
-	if (user?.user) {
+	if (user) {
 		isLoggedIn = true;
 	}
 

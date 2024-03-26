@@ -11,6 +11,7 @@ import { Form } from "@/app/lib/form";
 import { validateRequest } from "@/app/lib/auth";
 import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
+import { z } from "zod";
 
 const prisma = new PrismaClient();
 
@@ -108,6 +109,25 @@ export default async function Page() {
 	);
 }
 
+// const SignUpSchema = z
+// 	.object({
+// 		email: z.string().email("Please enter a valid email address"),
+// 		password: z.string().min(8, "Password must be at least 8 characters"),
+// 		confirmPassword: z.string(),
+// 	})
+// 	.refine((data) => data.password === data.confirmPassword, {
+// 		message: "Passwords do not match",
+// 		path: ["confirmPassword"],
+// 	});
+
+// interface SignUpFormState {
+// 	errors: {
+// 		email?: string[];
+// 		password?: string[];
+// 		confirmPassword?: string[];
+// 	};
+// }
+
 async function signup(_: any, formData: FormData): Promise<ActionResult> {
 	"use server";
 	const username = formData.get("email");
@@ -194,3 +214,64 @@ async function signup(_: any, formData: FormData): Promise<ActionResult> {
 	);
 	return redirect("/");
 }
+
+// // Validate fields on sign up
+// export async function validateSignUp(
+// 	formState: SignUpFormState,
+// 	formData: FormData
+// ): Promise<SignUpFormState> {
+
+// 	const parsedData = SignUpSchema.safeParse({
+// 		email: formData.get("email"),
+// 		password: formData.get("password"),
+// 		confirmPassword: formData.get("confirmPassword"),
+// 	});
+
+// 	if (!parsedData.success) {
+// 		const errors = parsedData.error.flatten().fieldErrors;
+// 		return { errors };
+// 	}
+
+// 	const data = parsedData.data;
+// 	const dateJoined = new Date().toISOString();
+// 	const distanceMetric = "kilometers";
+// 	const weightMetric = "kilograms";
+// 	const totalWorkouts = 0;
+// 	const ptWorkouts = [""];
+// 	const Exercises = [""];
+// 	const personalRecords = 0;
+// 	const { email, password } = parsedData.data;
+// 	const salt = await bcrypt.genSalt(10);
+// 	const hashedPassword = await bcrypt.hash(password, salt);
+// 	const updatedAt = new Date();
+
+// 	try {
+// 		const newUser = await prisma.user.create({
+// 			data: {
+// 				email,
+// 				password: hashedPassword,
+// 				dateJoined,
+// 				distanceMetric,
+// 				weightMetric,
+// 				totalWorkouts,
+// 			},
+// 		});
+// 	} catch (error: unknown) {
+// 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+// 			return {
+// 				errors: {
+// 					email: ["This email already exists. Did you forget your password?"],
+// 				},
+// 			};
+// 		}
+// 		return {
+// 			errors: {
+// 				email: [
+// 					"We appear to be having some difficulty. Please reach out to the dev to fix this bug.",
+// 				],
+// 			},
+// 		};
+// 		throw new Error("Failed to create a new user.");
+// 	}
+// 	redirect("/login");
+// }

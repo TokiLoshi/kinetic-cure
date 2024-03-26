@@ -11,8 +11,7 @@ import type { DatabaseUser } from "@/app/lib/definitions";
 import type { ActionResult } from "@/app/lib/form";
 import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
-
-const prisma = new PrismaClient();
+import prisma from "@/app/lib/prisma";
 
 export default async function Page() {
 	const { user } = await validateRequest();

@@ -12,9 +12,10 @@ import {
 import { lucia, validateRequest } from "@/app/lib/auth";
 import { cookies } from "next/headers";
 import { ActionResult } from "@/app/lib/form";
+import { getUser } from "@/app/lib/auth";
+import prisma from "@/app/lib/prisma";
 
-const prisma = new PrismaClient();
-
+// Log a user out
 export async function logout(): Promise<ActionResult> {
 	const { session } = await validateRequest();
 	if (!session) {
@@ -22,7 +23,6 @@ export async function logout(): Promise<ActionResult> {
 			error: "Unauthorized",
 		};
 	}
-
 	await lucia.invalidateSession(session.id);
 
 	const sessionCookie = lucia.createBlankSessionCookie();
@@ -34,135 +34,12 @@ export async function logout(): Promise<ActionResult> {
 	return redirect("/login");
 }
 
-// export async function authenticate(
-// 	prevState: string | undefined,
-// 	formData: FormData
-// ) {
-// 	console.log(`In authenticate function`);
-// 	console.log(`FormData: ${formData.get("email")}`);
-// 	console.log(`Password: ${formData.get("password")}`);
-// 	const email = formData.get("email");
-// 	const password = formData.get("password");
-
-// 	const credentials = { email, password };
-
-// 	try {
-// 		console.log("Parsing in credentials");
-// 		await signIn("credentials", {
-// 			redirect: false,
-// 			email,
-// 			password,
-// 		});
-// 	} catch (error) {
-// 		if (error instanceof AuthError) {
-// 			switch (error.type) {
-// 				case "CredentialsSignin":
-// 					return "Invalid credentials";
-// 				default:
-// 					return "Something went wrong";
-// 			}
-// 		}
-// 		throw error;
-// 	}
-// }
-
-// const SignUpSchema = z
-// 	.object({
-// 		email: z.string().email("Please enter a valid email"),
-// 		password: z
-// 			.string()
-// 			.min(8, "Password should be at least more characters. Please try again"),
-// 		confirmPassword: z.string(),
-// 	})
-// 	.refine((data) => data.password === data.confirmPassword, {
-// 		message: "Passwords do not match",
-// 		path: ["confirmPassword"],
-// 	});
-
-// interface SignUpFormState {
-// 	errors: {
-// 		email?: string[];
-// 		password?: string[];
-// 		confirmPassword?: string[];
-// 	};
-// }
-
-// // Validate fields on sign up
-// export async function validateSignUp(
-// 	formState: SignUpFormState,
-// 	formData: FormData
-// ): Promise<SignUpFormState> {
-// 	console.log(`In validate sign up`);
-// 	console.log(`Email: ${formData.get("email")}`);
-// 	console.log(`Password: ${formData.get("password")}`);
-// 	console.log(`Confirmation: ${formData.get("confirmPassword")}`);
-
-// 	const parsedData = SignUpSchema.safeParse({
-// 		email: formData.get("email"),
-// 		password: formData.get("password"),
-// 		confirmPassword: formData.get("confirmPassword"),
-// 	});
-// 	console.log(`Parsed data: ${parsedData.success}`);
-
-// 	if (!parsedData.success) {
-// 		const errors = parsedData.error.flatten().fieldErrors;
-// 		return { errors };
-// 	}
-
-// 	const data = parsedData.data;
-// 	const dateJoined = new Date().toISOString();
-// 	const distanceMetric = "kilometers";
-// 	const weightMetric = "kilograms";
-// 	const totalWorkouts = 0;
-// 	const ptWorkouts = [""];
-// 	const Exercises = [""];
-// 	const personalRecords = 0;
-// 	console.log(`Email: ${data.email}`);
-// 	console.log(`Password: ${data.password}`);
-// 	const { email, password } = parsedData.data;
-// 	const salt = await bcrypt.genSalt(10);
-// 	const hashedPassword = await bcrypt.hash(password, salt);
-// 	const updatedAt = new Date();
-
-// 	try {
-// 		const newUser = await prisma.user.create({
-// 			data: {
-// 				email,
-// 				password: hashedPassword,
-// 				dateJoined,
-// 				distanceMetric,
-// 				weightMetric,
-// 				totalWorkouts,
-// 			},
-// 		});
-// 		console.log(`New User: ${newUser}`);
-// 	} catch (error: unknown) {
-// 		console.log("Here's the issue from prisma: ", error);
-// 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
-// 			return {
-// 				errors: {
-// 					email: ["This email already exists. Did you forget your password?"],
-// 				},
-// 			};
-// 		}
-// 		console.error("Something else went wrong", error);
-// 		return {
-// 			errors: {
-// 				email: [
-// 					"We appear to be having some difficulty. Please reach out to the dev to fix this bug.",
-// 				],
-// 			},
-// 		};
-// 		throw new Error("Failed to create a new user.");
-// 	}
-// 	redirect("/login");
-// }
-
 enum ExerciseTypeEnum {
 	REGULAR = "REGULAR",
 	PT = "PT",
 }
 
+// Define an exercise
 const ExerciseSchema = z.object({
 	name: z.string({ invalid_type_error: "Please create a name" }),
 	description: z.string({ invalid_type_error: "Please add a description" }),
@@ -187,6 +64,21 @@ interface ExerciseFormState {
 	};
 }
 
+interface User {
+	id: string;
+	username: {
+		email: string;
+		username: string | null;
+		password: string;
+		name: string | null;
+		dateJoined: string;
+		distanceMetric: string;
+		weightMetric: string;
+		totalWorkouts: number;
+	};
+}
+
+// Add an exercise
 export async function addExercise(
 	formState: ExerciseFormState,
 	formData: FormData
@@ -207,6 +99,7 @@ export async function addExercise(
 
 	// Creating an empty muscle group
 	let selectedMuscleGroups: string[] = [];
+
 	if (typeof muscleGroupsData === "string" && muscleGroupsData) {
 		try {
 			selectedMuscleGroups = JSON.parse(muscleGroupsData);
@@ -271,7 +164,20 @@ export async function addExercise(
 		muscleGroups,
 		exerciseType,
 	} = validatedFields.data;
-	const authorId = "21";
+
+	const userResult = (await getUser()) as User;
+	console.log(`User Result: ${userResult.id}`);
+
+	if (!userResult || !userResult.id) {
+		return {
+			errors: {
+				name: ["you must be logged in to record an exercise"],
+			},
+		};
+	}
+
+	console.log("User: ", userResult.id);
+	const authorId: string = userResult.id;
 
 	// Check the correct exercise type is being passed on
 	if (!exerciseType) {
@@ -336,19 +242,20 @@ export async function editExercise(
 	formState: ExerciseFormState,
 	formData: FormData
 ): Promise<ExerciseFormState> {
-	console.log(`Editing an exercise, ${formData}`);
-	console.log(`Id: ${formData.get("id")}`);
-	console.log(`Name: ${formData.get("name")}`);
-	console.log(`Description: ${formData.get("description")}`);
-	console.log(`Equipment: ${formData.get("equipment")}`);
-	console.log(`Video Link: ${formData.get("videoLink")}`);
-	console.log(`Exercise Type: ${formData.get("selectedExercise")}`);
+	console.log(`From Form: Id: ${formData.get("id")}`);
+	console.log(`From Form: Name: ${formData.get("name")}`);
+	console.log(`From Form: Description: ${formData.get("description")}`);
+	console.log(`From Form: Equipment: ${formData.get("equipment")}`);
+	console.log(`From Form: Video Link: ${formData.get("videoLink")}`);
+	console.log(`From Form: Exercise Type: ${formData.get("selectedExercise")}`);
 
 	const muscleGroupsData = formData.get("muscleGroups");
 	console.log(
-		`Muscle group data from the form: ${muscleGroupsData}, type: ${muscleGroupsData}`
+		`From Form: Muscle group data: ${muscleGroupsData}, type: ${typeof muscleGroupsData}`
 	);
+
 	let selectedMuscleGroups: string[] = [];
+
 	if (typeof muscleGroupsData === "string" && muscleGroupsData) {
 		try {
 			selectedMuscleGroups = JSON.parse(muscleGroupsData);
@@ -367,7 +274,10 @@ export async function editExercise(
 			},
 		};
 	}
+
 	const exerciseTypeClientValue = formData.get("selectedExercise");
+	console.log(`From Form: exercise type: ${exerciseTypeClientValue}`);
+
 	let formExerciseId = formData.get("id");
 	if (formExerciseId === null) {
 		return {
@@ -378,16 +288,7 @@ export async function editExercise(
 	}
 	const idString = formExerciseId as string;
 	const idNumber = parseInt(idString, 10);
-	console.log(`About to validate all is good, to check we have the following: 
-	${idNumber} type of ${typeof idNumber}
-	${formData.get("name")} which is type ${typeof formData.get("name")}
-	${formData.get("description")} which is type of ${typeof formData.get(
-		"description"
-	)}
-	${formData.get("videoLink")} which is ${typeof formData.get("videoLink")}
-	${selectedMuscleGroups} type of ${selectedMuscleGroups}
-	${exerciseTypeClientValue} type of ${exerciseTypeClientValue}
-	`);
+
 	const validatedFields = ExerciseEditSchema.safeParse({
 		id: idNumber,
 		name: formData.get("name"),
@@ -397,23 +298,24 @@ export async function editExercise(
 		muscleGroups: selectedMuscleGroups,
 		exerciseType: exerciseTypeClientValue,
 	});
-	console.log(validatedFields.success);
-	console.log(validatedFields);
+	console.log("Was validation successful?", validatedFields.success);
+	console.log("Validated fields: ", validatedFields);
 
 	if (!validatedFields.success) {
 		const errors = validatedFields.error.flatten().fieldErrors;
-		console.log(errors);
+		console.log("something went wrong during validation", errors);
 		return { errors };
 	}
 
-	const muscleGroupIds = await Promise.all(
-		selectedMuscleGroups.map(async (groupName) => {
-			const muscleGroup = await prisma.muscleGroup.findUnique({
-				where: { name: groupName },
-			});
-			return muscleGroup ? muscleGroup.id : null;
-		})
-	);
+	const muscleGroupQuery = await prisma.muscleGroup.findMany({
+		where: {
+			OR: selectedMuscleGroups.map((name) => ({ name })),
+		},
+	});
+	console.log("Muscle group Query: ", muscleGroupQuery);
+
+	const musclegroupIds = muscleGroupQuery.map((group) => group.id);
+	console.log("Muscle group ids: ", musclegroupIds);
 
 	const {
 		id,
@@ -424,8 +326,22 @@ export async function editExercise(
 		muscleGroups,
 		exerciseType,
 	} = validatedFields.data;
-	const authorId = 21;
+
+	// Ensure User is logged in
+	const userResult = (await getUser()) as User;
+	if (!userResult || !userResult.id) {
+		console.log(`User shouldn't be trying to edit this exercise`);
+
+		return {
+			errors: {
+				name: ["you don't have permission to edit this exercise"],
+			},
+		};
+	}
+	console.log(`User doing the editing: ${userResult}`);
+
 	if (!exerciseType) {
+		console.log(`Exercise type missing`);
 		errors: {
 			selectedExercise: ["Invalid exercise type provided"];
 		}
@@ -433,32 +349,58 @@ export async function editExercise(
 
 	const exerciseId = await prisma.exercises.findUnique({
 		where: {
-			name: name,
+			id: id,
 		},
 	});
+	console.log("Exercise id: ", exerciseId);
+	console.log(`Is user authorized: ${exerciseId?.authorId === userResult.id}`);
 
-	console.log(`Exercise Id from Prisma: ${exerciseId}`);
+	// Ensure only authors can edit exercises
+	const authorUserId = exerciseId?.authorId;
+	if (userResult.id !== authorUserId) {
+		return {
+			errors: {
+				name: ["you are not authorised to edit this exercise"],
+			},
+		};
+	}
+
+	console.log("Author id: ", authorUserId);
+
+	console.log(`Everything that's going to get edited:
+	Id: ${id}, name: ${name}, description: ${description}
+	equipment ${equipment}, videoLink: ${videoLink}, exercise:
+	${exerciseType} and musclegroupIds: ${musclegroupIds} type: 
+	${typeof musclegroupIds}
+	`);
 
 	try {
-		const editedExercise = await prisma.exercises.update({
-			where: {
-				id: id,
-			},
-			data: {
-				name,
-				description,
-				equipment,
-				videoLink,
-				exerciseType,
-				muscleGroups: {
-					connect: muscleGroupIds
-						.filter((id): id is number => id !== null)
-						.map((id) => ({ id })),
+		const updatedExercise = await prisma.$transaction(async (prisma) => {
+			const exerciseUpdate = await prisma.exercises.update({
+				where: { id: id },
+				data: {
+					name,
+					description,
+					equipment,
+					videoLink,
+					exerciseType,
 				},
-			},
+			});
+			const muscleGroupUpdate = await prisma.exerciseMuscleGroup.deleteMany({
+				where: { exerciseId: id },
+			});
+			await prisma.exerciseMuscleGroup.createMany({
+				data: musclegroupIds.map((muscleGroupId) => ({
+					exerciseId: id,
+					muscleGroupId: muscleGroupId,
+				})),
+				skipDuplicates: true,
+			});
+			return exerciseUpdate;
 		});
+		console.log(updatedExercise);
 	} catch (error: unknown) {
-		console.warn(error);
+		console.warn("Something went wrong with prisma", error);
 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
 			return {
 				errors: {
@@ -467,6 +409,13 @@ export async function editExercise(
 			};
 		}
 	}
+
+	const updatedExercise = await prisma.exercises.findUnique({
+		where: { id: id },
+		include: { muscleGroups: true },
+	});
+	console.log("Updated Exercise at end:", updatedExercise?.muscleGroups);
+
 	redirect("/dashboard");
 }
 
@@ -511,7 +460,7 @@ export async function deleteExercise(id: number, inViewRoute = false) {
 	}
 	console.log(`Deleted Exercise`);
 	if (inViewRoute) {
-		redirect("/dashboard/addworkout");
+		redirect("/dashboard");
 	} else {
 		redirect("/dashboard");
 	}

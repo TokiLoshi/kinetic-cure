@@ -1,5 +1,4 @@
 "use client";
-
 import { useFormState } from "react-dom";
 
 export function Form({
@@ -9,6 +8,7 @@ export function Form({
 	children: React.ReactNode;
 	action: (prevState: any, formData: FormData) => Promise<ActionResult>;
 }) {
+	console.log(`Action: ${action}`);
 	const [state, formAction] = useFormState(action, {
 		error: null,
 	});

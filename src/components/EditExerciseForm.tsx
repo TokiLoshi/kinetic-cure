@@ -212,11 +212,10 @@ export default function EditExerciseForm({
 						</div>
 					</div>
 					<div className='md:w-2/3'>
-						<input
+						<textarea
 							name='description'
-							className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+							className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full w-300 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
 							placeholder={exercise.description}
-							type='text'
 							id='description'
 							required
 							defaultValue={exercise.description}

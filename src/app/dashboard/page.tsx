@@ -85,7 +85,7 @@ export default async function Page() {
 	const { email } = username;
 	// console.log(`Object: ${username.username}`);
 	let exercises = await getExercises();
-	console.log(`Exercises in main: ${Object.values(exercises)}`);
+	console.log("Exercises in main: ", exercises);
 	let isLoggedIn = true;
 
 	return (
