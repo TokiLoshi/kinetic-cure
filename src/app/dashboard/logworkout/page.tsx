@@ -2,33 +2,14 @@ import { sql } from "@vercel/postgres";
 import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import { getUser } from "@/app/lib/auth";
+import { addWorkout } from "@/app/lib/workoutActions";
 import { redirect } from "next/navigation";
-import { PrismaClient } from "@prisma/client";
+import WorkoutForm from "@/components/AddWorkoutForm";
 
 interface User {
 	user: any | null;
 	session: any | null;
 	username: any | null;
-}
-
-async function logWorkout({
-	params,
-}: {
-	params: { user: string };
-}): Promise<JSX.Element> {
-	const { rows } =
-		await sql`SELECT * FROM workouts WHERE user = ${params.user}`;
-	return (
-		<div>
-			{rows.map((row) => {
-				return (
-					<div key={row.id}>
-						{row.id} - {row.user}
-					</div>
-				);
-			})}
-		</div>
-	);
 }
 
 export default async function Page() {
@@ -50,6 +31,14 @@ export default async function Page() {
 				<h1 className='m-2'>This is the log workout page</h1>
 			</div>
 			<p className='text-center'>Logging of {username} workouts will go here</p>
+			<WorkoutForm formAction={addWorkout} initialData={{
+				name: "",
+				duration: 0,
+				athleteId: user?.id,
+				dateCompleted: new Date(),
+				notes: "",
+				exercises: [],
+			}}/>
 			<Footer />
 		</>
 	);

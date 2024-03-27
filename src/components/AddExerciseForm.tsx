@@ -173,7 +173,7 @@ export default function WorkoutForm({
 							type='text'
 							id='name'
 							required
-							placeholder='Workout Name'
+							placeholder='Exercise Name'
 						/>
 						{formState.errors?.name && (
 							<p className='text-red-500 text-xs italic'>

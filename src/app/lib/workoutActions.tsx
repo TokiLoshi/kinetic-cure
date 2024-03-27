@@ -1,4 +1,4 @@
-"user server";
+"use server"
 import { z } from "zod";
 import { getUser, lucia, validateRequest } from "@/app/lib/auth";
 import { ActionResult } from "@/app/lib/form";
