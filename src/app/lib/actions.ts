@@ -2,8 +2,6 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { AuthError } from "next-auth";
-import bcrypt from "bcrypt";
 import { PrismaClient, Prisma } from "@prisma/client";
 import {
 	PrismaClientUnknownRequestError,
@@ -83,19 +81,7 @@ export async function addExercise(
 	formState: ExerciseFormState,
 	formData: FormData
 ): Promise<ExerciseFormState> {
-	// Checking what we got back from the form
-	console.log(`Adding in an exercise, ${formData}`);
-	console.log(`Name: ${formData.get("name")}`);
-	console.log(`Description: ${formData.get("description")}`);
-	console.log(`Equipment: ${formData.get("equipment")}`);
-	console.log(`Video link: ${formData.get("videoLink")}`);
-	console.log(`Exercise Type: ${formData.get("selectedExercise")}`);
 	const muscleGroupsData = formData.get("muscleGroups");
-	console.log(
-		"Muscle data from the form: ",
-		muscleGroupsData,
-		typeof muscleGroupsData
-	);
 
 	// Creating an empty muscle group
 	let selectedMuscleGroups: string[] = [];
@@ -103,16 +89,10 @@ export async function addExercise(
 	if (typeof muscleGroupsData === "string" && muscleGroupsData) {
 		try {
 			selectedMuscleGroups = JSON.parse(muscleGroupsData);
-			console.log("Post parsing: ", selectedMuscleGroups);
 		} catch (error) {
 			console.warn("Error - failed to deserialize muscle data", error);
 		}
 	}
-	console.log(
-		`Selected MuscleGroups: ${selectedMuscleGroups} length: ${
-			selectedMuscleGroups.length
-		} type: ${typeof selectedMuscleGroups}`
-	);
 
 	// Check that we got a muscle group back otherwise return an error
 	if (selectedMuscleGroups.length === 0) {
@@ -127,8 +107,6 @@ export async function addExercise(
 	// Validate the data
 	const exerciseTypeClientValue = formData.get("selectedExercise");
 
-	console.log(`ExerciseTypeClientValue: ${exerciseTypeClientValue}`);
-
 	const validatedFields = ExerciseSchema.safeParse({
 		name: formData.get("name"),
 		description: formData.get("description"),
@@ -137,9 +115,6 @@ export async function addExercise(
 		muscleGroups: selectedMuscleGroups,
 		exerciseType: exerciseTypeClientValue,
 	});
-	console.log(validatedFields.success);
-
-	console.log(validatedFields);
 
 	// Return errors for invalid data
 	if (!validatedFields.success) {
@@ -166,7 +141,6 @@ export async function addExercise(
 	} = validatedFields.data;
 
 	const userResult = (await getUser()) as User;
-	console.log(`User Result: ${userResult.id}`);
 
 	if (!userResult || !userResult.id) {
 		return {
@@ -176,7 +150,6 @@ export async function addExercise(
 		};
 	}
 
-	console.log("User: ", userResult.id);
 	const authorId: string = userResult.id;
 
 	// Check the correct exercise type is being passed on
@@ -242,31 +215,15 @@ export async function editExercise(
 	formState: ExerciseFormState,
 	formData: FormData
 ): Promise<ExerciseFormState> {
-	console.log(`From Form: Id: ${formData.get("id")}`);
-	console.log(`From Form: Name: ${formData.get("name")}`);
-	console.log(`From Form: Description: ${formData.get("description")}`);
-	console.log(`From Form: Equipment: ${formData.get("equipment")}`);
-	console.log(`From Form: Video Link: ${formData.get("videoLink")}`);
-	console.log(`From Form: Exercise Type: ${formData.get("selectedExercise")}`);
-
 	const muscleGroupsData = formData.get("muscleGroups");
-	console.log(
-		`From Form: Muscle group data: ${muscleGroupsData}, type: ${typeof muscleGroupsData}`
-	);
-
 	let selectedMuscleGroups: string[] = [];
-
 	if (typeof muscleGroupsData === "string" && muscleGroupsData) {
 		try {
 			selectedMuscleGroups = JSON.parse(muscleGroupsData);
-			console.log(`Post parsing: ${selectedMuscleGroups}`);
 		} catch (error) {
 			console.warn(`Error - failed to deserialize muscle groups: ${error}`);
 		}
 	}
-	console.log(
-		`Length of selected muscle groups: ${selectedMuscleGroups} is ${selectedMuscleGroups.length}`
-	);
 	if (selectedMuscleGroups.length === 0) {
 		return {
 			errors: {
@@ -276,7 +233,6 @@ export async function editExercise(
 	}
 
 	const exerciseTypeClientValue = formData.get("selectedExercise");
-	console.log(`From Form: exercise type: ${exerciseTypeClientValue}`);
 
 	let formExerciseId = formData.get("id");
 	if (formExerciseId === null) {
@@ -303,7 +259,6 @@ export async function editExercise(
 
 	if (!validatedFields.success) {
 		const errors = validatedFields.error.flatten().fieldErrors;
-		console.log("something went wrong during validation", errors);
 		return { errors };
 	}
 
@@ -312,10 +267,8 @@ export async function editExercise(
 			OR: selectedMuscleGroups.map((name) => ({ name })),
 		},
 	});
-	console.log("Muscle group Query: ", muscleGroupQuery);
 
 	const musclegroupIds = muscleGroupQuery.map((group) => group.id);
-	console.log("Muscle group ids: ", musclegroupIds);
 
 	const {
 		id,
@@ -330,15 +283,12 @@ export async function editExercise(
 	// Ensure User is logged in
 	const userResult = (await getUser()) as User;
 	if (!userResult || !userResult.id) {
-		console.log(`User shouldn't be trying to edit this exercise`);
-
 		return {
 			errors: {
 				name: ["you don't have permission to edit this exercise"],
 			},
 		};
 	}
-	console.log(`User doing the editing: ${userResult}`);
 
 	if (!exerciseType) {
 		console.log(`Exercise type missing`);
@@ -352,8 +302,6 @@ export async function editExercise(
 			id: id,
 		},
 	});
-	console.log("Exercise id: ", exerciseId);
-	console.log(`Is user authorized: ${exerciseId?.authorId === userResult.id}`);
 
 	// Ensure only authors can edit exercises
 	const authorUserId = exerciseId?.authorId;
@@ -364,15 +312,6 @@ export async function editExercise(
 			},
 		};
 	}
-
-	console.log("Author id: ", authorUserId);
-
-	console.log(`Everything that's going to get edited:
-	Id: ${id}, name: ${name}, description: ${description}
-	equipment ${equipment}, videoLink: ${videoLink}, exercise:
-	${exerciseType} and musclegroupIds: ${musclegroupIds} type: 
-	${typeof musclegroupIds}
-	`);
 
 	try {
 		const updatedExercise = await prisma.$transaction(async (prisma) => {
@@ -414,8 +353,6 @@ export async function editExercise(
 		where: { id: id },
 		include: { muscleGroups: true },
 	});
-	console.log("Updated Exercise at end:", updatedExercise?.muscleGroups);
-
 	redirect("/dashboard");
 }
 

@@ -14,26 +14,26 @@ generator client {
 }
 
 model User {
-  id                  String            @id @default(uuid())
-  email               String            @unique
-  username            String            @unique
-  password            String               
-  name                String?
-  dateJoined          DateTime          @default(now())
-  distanceMetric      String
-  weightMetric        String
-  totalWorkouts       Int
-  Workouts            Workouts[]        
-  Exercises           Exercises[]
-  PersonalRecords     PersonalRecords[]
-  sessions            Session[]
+  id              String            @id @default(uuid())
+  email           String            @unique
+  username        String            @unique
+  password        String
+  name            String?
+  dateJoined      DateTime          @default(now())
+  distanceMetric  String
+  weightMetric    String
+  totalWorkouts   Int
+  Workouts        Workouts[]
+  Exercises       Exercises[]
+  PersonalRecords PersonalRecords[]
+  sessions        Session[]
 }
 
 model Session {
-  id                  String            @id
-  userId              String
-  expiresAt           DateTime
-  user                User              @relation(references: [id], fields: [userId], onDelete: Cascade)
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Workouts {
@@ -41,13 +41,11 @@ model Workouts {
   athleteId            String
   athlete              User                   @relation(fields: [athleteId], references: [id], onDelete: Cascade)
   dateCompleted        DateTime
+  duration             Float
+  name                 String
   notes                String
-  personalRecord       Boolean
-  distance             Float
-  reps                 Int
-  sets                 Int
-  exercises            Exercises[]
-  WorkoutExerciseGroup WorkoutExerciseGroup[] 
+  WorkoutExerciseGroup WorkoutExerciseGroup[]
+  Exercises            Exercises[]
 }
 
 model Exercises {
@@ -82,6 +80,7 @@ model PersonalRecords {
   reps       Int
   distance   Float
   weight     Float
+  sets       Int
 }
 
 model MuscleGroup {
@@ -101,10 +100,17 @@ model ExerciseMuscleGroup {
 }
 
 model WorkoutExerciseGroup {
-  exerciseId    Int
-  workoutId     Int
-  exerciseGroup Exercises @relation(fields: [exerciseId], references: [id])
-  workout       Workouts  @relation(fields: [workoutId], references: [id])
+  exerciseId  Int
+  workoutId   Int
+  reps        Int
+  sets        Int
+  weight      Int
+  distance    Int
+  pr          Boolean
+  restTime    Int
+  workout     Workouts   @relation(fields: [workoutId], references: [id])
+  Exercises   Exercises? @relation(fields: [exercisesId], references: [id])
+  exercisesId Int?
 
   @@id([exerciseId, workoutId])
 }
