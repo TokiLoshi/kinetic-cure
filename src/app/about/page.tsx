@@ -1,12 +1,12 @@
 import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import { getUser } from "@/app/lib/auth";
+import prisma from "@/app/lib/prisma";
 
 interface User {
 	user: any | null;
 	session: any | null;
 }
-
 export default async function Page() {
 	const user = (await getUser()) as User;
 	console.log(`User in about page: ${JSON.stringify(user)}`);

@@ -29,7 +29,7 @@ export default async function Page() {
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
-			<div className='flex justify-center m-2'>
+			<div className='py-20 mx-auto text-center flex flex-col items-center max-w-3xl'>
 				<WorkoutForm
 					formAction={addExercise}
 					initialData={{

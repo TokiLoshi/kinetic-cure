@@ -4,6 +4,18 @@ import Link from "next/link";
 import SignOutButton from "./LogoutButton";
 
 import { useEffect } from "react";
+import Beaker from "../../public/nav/icons/beaker";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "./ui/sheet";
+import { Button } from "./ui/button";
 
 type NavbarProps = {
 	isLoggedIn: boolean;
@@ -18,23 +30,12 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 		<>
 			<nav className='flex items-center justify-between flex-wrap bg-zinc-800 p-6'>
 				<div className='flex items-center flex-shrink-0 text-white mr-6'>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						fill='none'
-						viewBox='0 0 24 24'
-						strokeWidth='1.5'
-						stroke='currentColor'
-						className='w-6 h-6'>
-						<path
-							strokeLinecap='round'
-							strokeLinejoin='round'
-							d='M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5'
-						/>
-					</svg>
-
-					<span className='font-semibold text-xl tracking-tight ml-2'>
+					<Beaker />
+					sadfadsf
+					<span className='font-semibold text-xl tracking-tight ml-2 text-indigo-500'>
 						{" "}
-						<Link href='/'>Kinetic Cure</Link>
+						Kinetic
+						<Link href='/'>Cure Logo</Link>
 					</span>
 				</div>
 				<div className='block lg:hidden'>
@@ -56,6 +57,44 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 							/>
 						</svg>
 					</button>
+					{isMenuOpen && (
+						<Sheet>
+							<SheetTrigger asChild>
+								<Button variant='outline'>Open</Button>
+							</SheetTrigger>
+							<SheetContent>
+								<SheetHeader>
+									<SheetTitle>Edit Profile</SheetTitle>
+									<SheetDescription>
+										Make changes to your profile here
+									</SheetDescription>
+								</SheetHeader>
+								<div className='grid gap-4 py-4'>
+									<div className='grid grid-cols-4 items-center gap-4'>
+										<label htmlFor='name' className='text-right'>
+											Name
+										</label>
+										<input id='name' value='pedro' className='col-span-3' />
+									</div>
+									<div className='grid grid-cols-4 items-center gap-4'>
+										<label htmlFor='username' className='text-right'>
+											Username
+										</label>
+										<input
+											id='username'
+											value='@peduarte'
+											className='col-span-3'
+										/>
+									</div>
+								</div>
+								<SheetFooter>
+									<SheetClose asChild>
+										<Button type='submit'>Save Changes</Button>
+									</SheetClose>
+								</SheetFooter>
+							</SheetContent>
+						</Sheet>
+					)}
 				</div>
 				<div
 					className={`${isMenuOpen ? "block" : "hidden"}
@@ -63,7 +102,7 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 						`}>
 					<div className='text-sm lg:flex-grow'>
 						<Link href='/about' className='m-2 text-white hover:text-lime-300'>
-							About
+							About Page blah balah blah
 						</Link>
 						{isLoggedIn && (
 							<>
@@ -86,6 +125,11 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 									className='m-2 text-white hover:text-lime-300'
 									href='/signup'>
 									Sign up
+								</Link>
+								<Link
+									className='m-2 text-white hover:text-lime-300'
+									href='/signup'>
+									Sign up Blah
 								</Link>
 							</>
 						)}

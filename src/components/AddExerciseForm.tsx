@@ -71,7 +71,7 @@ const MuscleGroupCheckboxes: React.FC<MuscleGroupCheckboxesProps> = ({
 		});
 	};
 	return (
-		<div className='muscle-group-checkboxes'>
+		<div className='muscle-group-checkboxes flex flex-col items-start space-x-3 space-y-0'>
 			{muscleGroups.map((muscleGroup) => (
 				<label key={muscleGroup}>
 					<input
@@ -153,16 +153,16 @@ export default function WorkoutForm({
 	return (
 		<>
 			<form action={action}>
-				<h1 className='flex justify-center m-2 text-gray-500 font-bold'>
+				<h1 className='flex justify-left mb-2 text-slate-900 font-bold'>
 					Add Exercise
 				</h1>
-				<div className='w-full max-w-md'>
+				<div className='w-full max-w-md min-w-400'>
 					<div className='md:flex md:items-center mb-6'>
 						<div className='md:w-1/3'>
 							<label
 								htmlFor='name'
-								className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
-								Exercise Name
+								className='block text-slate-800 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+								Name
 							</label>
 						</div>
 					</div>
@@ -184,7 +184,7 @@ export default function WorkoutForm({
 
 					<div className='md:flex md:items-center mb-6'>
 						<div className='md:w-1/3'>
-							<label className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+							<label className='block text-slate-800 mt-2 font-bold md:text-right mb-1 md:mb-0 pr-4'>
 								Description
 							</label>
 						</div>
@@ -207,7 +207,7 @@ export default function WorkoutForm({
 					<div>
 						<div className='md:flex md:items-center mb-6'>
 							<div className='md:w-1/3'>
-								<label className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+								<label className='block text-slate-800 font-bold md:text-right mb-1 md:mb-0 pr-4'>
 									MuscleGroups
 								</label>
 							</div>
@@ -231,7 +231,7 @@ export default function WorkoutForm({
 					<div>
 						<div className='md:flex md:items-center mb-6'>
 							<div className='md:w-1/3'>
-								<label className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+								<label className='block text-slate-800 font-bold md:text-right mb-1 md:mb-0 pr-4'>
 									Equipment
 								</label>
 							</div>
@@ -255,7 +255,7 @@ export default function WorkoutForm({
 					<div>
 						<div className='md:flex md:items-center mb-6'>
 							<div className='md:w-1/3'>
-								<label className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+								<label className='block text-slate-800 font-bold md:text-right mb-1 md:mb-0 pr-4'>
 									Video Link
 								</label>
 							</div>
@@ -273,7 +273,7 @@ export default function WorkoutForm({
 					<div>
 						<div className='md:flex md:items-center mb-6'>
 							<div className='md:w-1/3'>
-								<label className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+								<label className='block text-slate-800 font-bold md:text-right mb-1 md:mb-0 pr-4'>
 									Exercise Type
 								</label>
 							</div>
@@ -290,15 +290,12 @@ export default function WorkoutForm({
 					</div>
 				</div>
 				<div className='md:flex md:items-center mt-2'>
-					<div className='md:w-1/3'></div>
-					<div className='md:w-2/3'>
-						<button
-							className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'
-							type='submit'
-							id='signupButton'>
-							Add Workout
-						</button>
-					</div>
+					<button
+						className='shadow bg-purple-800 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'
+						type='submit'
+						id='signupButton'>
+						Add Workout
+					</button>
 				</div>
 			</form>
 		</>

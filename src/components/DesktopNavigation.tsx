@@ -4,6 +4,19 @@ import Link from "next/link";
 import SignOutButton from "./LogoutButton";
 
 import { useEffect } from "react";
+import Beaker from "../../public/nav/icons/beaker";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "./ui/sheet";
+import { Button } from "./ui/button";
+import SignButton from "./LogoutButton";
 
 type NavbarProps = {
 	isLoggedIn: boolean;
@@ -16,74 +29,131 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 	console.log(`Logged state: ${loggedState.isLoggedIn}`);
 	return (
 		<>
-			<nav className='flex items-center justify-between flex-wrap bg-zinc-800 p-6'>
+			<nav className='flex items-center justify-between bg-zinc-900 p-6'>
 				<div className='flex items-center flex-shrink-0 text-white mr-6'>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						fill='none'
-						viewBox='0 0 24 24'
-						strokeWidth='1.5'
-						stroke='currentColor'
-						className='w-6 h-6'>
-						<path
-							strokeLinecap='round'
-							strokeLinejoin='round'
-							d='M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5'
-						/>
-					</svg>
+					<Beaker />
 
-					<span className='font-semibold text-xl tracking-tight ml-2'>
+					<span className='font-semibold text-3xl tracking-tight ml-2 text-indigo-300 hover:text-indigo-400'>
 						{" "}
 						<Link href='/'>Kinetic Cure</Link>
 					</span>
 				</div>
-				<div className='block lg:hidden'>
-					<button
-						className='flex items-center px-3 py-2 border rounded text-white border-white hover:text-white hover:border-white'
-						onClick={() => setIsMenuOpen(!isMenuOpen)}>
+				<div className='block lg:hidden'></div>
+				{/* {isMenuOpen && ( */}
+				<Sheet>
+					<SheetTrigger asChild>
 						{/* HeroIcons https://heroicons.com/ */}
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							fill='none'
-							viewBox='0 0 24 24'
-							strokeWidth='1.5'
-							stroke='currentColor'
-							className='w-6 h-6'>
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
-							/>
-						</svg>
-					</button>
-				</div>
-				<div
-					className={`${isMenuOpen ? "block" : "hidden"}
-						w-full block flex-grow lg:flex lg:items-center lg:w-auto
-						`}>
-					<div className='text-sm lg:flex-grow'>
-						<Link href='/about' className='m-2 text-white hover:text-lime-300'>
-							About
-						</Link>
+						<Button
+							variant='outline'
+							className='flex items-center px-3 py-2 border rounded text-lilac-300 bg-indigo-500 border-indigo-400 hover:text-indigo-900 hover:border-indigo-500 hover:bg-indigo-600 lg:hidden'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
+								strokeWidth='1.5'
+								stroke='white'
+								className='w-6 h-6'>
+								<path
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
+								/>
+							</svg>
+						</Button>
+					</SheetTrigger>
+					<SheetContent>
+						<SheetHeader>
+							<SheetTitle>Main Menu</SheetTitle>
+							<SheetDescription>Lets get Started</SheetDescription>
+						</SheetHeader>
 						{isLoggedIn && (
 							<>
-								<SignOutButton />
-								<Link
-									className='m-2 text-white hover:text-lime-300'
-									href='/dashboard'>
-									Dashboard
-								</Link>
+								<div>
+									<div className='grid gap-4 py-4'>
+										<div className='grid grid-cols-12 items-center gap-4'>
+											<Link href='/dashboard'>Dashboard</Link>
+										</div>
+									</div>
+								</div>
+								<div>
+									<div className='grid gap-4 py-8'>
+										<div className='grid grid-cols-12  gap-4'>
+											<Link href='/dashboard/addworkout'>Add Workout</Link>
+										</div>
+									</div>
+								</div>
+								<div className='grid gap-4 py-4'>
+									<div className='grid grid-cols-8 items-center gap-4'>
+										<Link href='/dashboard/logworkout'>Log Workout</Link>
+									</div>
+								</div>
+								<div className='grid gap-4 py-4'>
+									<div className='grid grid-cols-8 items-center gap-4'>
+										<SignButton />
+									</div>
+								</div>
+							</>
+						)}
+						{!isLoggedIn && (
+							<>
+								<div className='grid gap-4 py-4'>
+									<div className='grid grid-cols-4 items-center gap-4'>
+										<Link href='/signup'>Sign up</Link>
+									</div>
+									<div className='grid grid-cols-4 items-center gap-4'>
+										<Link href='/login'>Log in</Link>
+									</div>
+								</div>
+							</>
+						)}
+						<SheetFooter>
+							<SheetClose asChild>
+								<Button type='submit' variant='ghost'>
+									Close
+								</Button>
+							</SheetClose>
+						</SheetFooter>
+					</SheetContent>
+				</Sheet>
+				{/* )} */}
+				<div className='text-sm lg:flex-grow'>
+					<div
+						className={`${isMenuOpen ? "block" : "hidden"}
+						w-full block flex-grow lg:flex lg:items-center lg:w-auto
+						`}>
+						{isLoggedIn && (
+							<>
+								<div className='flex items-center'>
+									<Link
+										className='m-2 text-white text-xl hover:text-indigo-300'
+										href='/dashboard'>
+										Dashboard
+									</Link>
+									<Link
+										className='m-2 text-white text-xl hover:text-indigo-300'
+										href='/dashboard/addworkout'>
+										Add Workout
+									</Link>
+									<Link
+										className='m-2 text-white text-xl hover:text-indigo-300'
+										href='/dashboard/logworkout'>
+										Log Workout
+									</Link>
+									<div className='ml-auto'>
+										<SignOutButton />
+									</div>
+								</div>
 							</>
 						)}
 						{!isLoggedIn && (
 							<>
 								<Link
-									className='text-white m-2 hover:text-lime-300'
+									className='text-white text-xl m-2 hover:text-indigo-300'
 									href='/login'>
 									Login
 								</Link>
 								<Link
-									className='m-2 text-white hover:text-lime-300'
+									className='m-2 text-white text-xl hover:text-indigo-300'
 									href='/signup'>
 									Sign up
 								</Link>

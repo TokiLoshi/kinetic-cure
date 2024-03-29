@@ -1,6 +1,14 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useFormState } from "react-dom";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 
 type MuscleGroup =
 	| "Biceps"
@@ -66,7 +74,7 @@ const MuscleGroupCheckboxes: React.FC<MuscleGroupCheckboxesProps> = ({
 	};
 
 	return (
-		<div>
+		<div className='flex flex-row items-start space-x-3 space-y-0'>
 			{muscleGroups.map((muscleGroup) => {
 				return (
 					<div key={muscleGroup}>

@@ -8,6 +8,15 @@ import { redirect } from "next/navigation";
 import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import prisma from "@/app/lib/prisma";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 
 interface User {
 	user: any | null;
@@ -91,8 +100,8 @@ export default async function Page() {
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
-			<h1 className='text-center m-2 text-bold'>
-				Welcome back what shall we do next? {email}!
+			<h1 className='text-center m-2 text-bold text-xl'>
+				Welcome back! What shall we do next? {email}!
 			</h1>
 
 			<div className='flex justify-center'>
@@ -115,31 +124,51 @@ export default async function Page() {
 				{exercises &&
 					exercises.map((exercise: ProcessedExercise) => {
 						return (
-							<div key={exercise.id} className='flex m-2 p-2 text-center'>
-								<h2>Name: {exercise.name}</h2>
-								<p>
-									<strong>Description: </strong>
-									{exercise.description}
-								</p>
-								<p>
-									<strong>Muscle Groups: </strong>
-									{exercise.muscleGroups.join(", ")}
-								</p>
-								<p>
-									<strong>Exercise Type: </strong>
-									{exercise.exerciseType === "REGULAR"
-										? "Strength / Cardio "
-										: "Physio"}
-								</p>
-								<DeleteButton id={exercise.id} />
-								<div>
-									<Link
-										href={`/dashboard/${exercise.id}/editworkout`}
-										className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
-										Edit
-									</Link>
-								</div>
-							</div>
+							<>
+								<Card
+									key={exercise.id}
+									className='bg-indigo-500 text-white m-5'>
+									<CardHeader>
+										<CardTitle>{exercise.name}</CardTitle>
+										<CardDescription className='text-white'>
+											<span className='text-xl text-muted'>Decription: </span>
+											{exercise.description}
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<p>
+											<span className='text-xl text-muted'>
+												Muscle Groups:{" "}
+											</span>
+											{exercise.muscleGroups.join(",")}
+										</p>
+										<p>
+											<span className='text-xl'>Exercise Type: </span>
+											{exercise.exerciseType === "REGULAR"
+												? "Strength / Cardio "
+												: "Physio"}
+										</p>
+										<p>
+											<span className='text-xl'>Equipment: </span>
+											{exercise.equipment}
+										</p>
+										<p>
+											<span className='text-xl'>Instructional Link: </span>
+											{exercise.videoLink}
+										</p>
+									</CardContent>
+									<CardFooter>
+										<DeleteButton id={exercise.id} />
+										<div className='m-2'>
+											<Link
+												href={`/dashboard/${exercise.id}/editworkout`}
+												className='shadow bg-slate-800 hover:bg-slate-900 focus:shadow-outline focus-outline-none text-white font-bold py-2.5 px-5 rounded'>
+												Edit
+											</Link>
+										</div>
+									</CardFooter>
+								</Card>
+							</>
 						);
 					})}
 				{!exercises && (
