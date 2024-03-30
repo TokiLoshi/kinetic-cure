@@ -109,6 +109,7 @@ export default async function Page() {
 					</MaxWidthWrapper>
 				</section>
 			</MaxWidthWrapper>
+			<div className='py-20'></div>
 			<Footer />
 		</>
 	);

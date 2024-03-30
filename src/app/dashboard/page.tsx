@@ -9,6 +9,7 @@ import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import prisma from "@/app/lib/prisma";
 import { Button } from "@/components/ui/button";
+
 import {
 	Card,
 	CardContent,
@@ -17,6 +18,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import DatePicker from "@/components/DatePicker";
 
 interface User {
 	user: any | null;
@@ -97,6 +99,8 @@ export default async function Page() {
 	console.log("Exercises in main: ", exercises);
 	let isLoggedIn = true;
 
+	console.log("Exercises length: ", exercises.length);
+
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
@@ -104,21 +108,17 @@ export default async function Page() {
 				Welcome back! What shall we do next? {email}!
 			</h1>
 
-			<div className='flex justify-center'>
-				<button className='m-2'>
-					<Link
-						href='/dashboard/logworkout'
-						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
+			<div className='flex justify-center gap-10'>
+				<Button className='gap-2'>
+					<Link href='/dashboard/logworkout' className='shadow'>
 						Log Workout
 					</Link>
-				</button>
-				<button className='m-2'>
-					<Link
-						href='/dashboard/addworkout'
-						className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'>
-						Add workout
+				</Button>
+				<Button>
+					<Link href='/dashboard/addworkout' className='shadow '>
+						Add Exercise
 					</Link>
-				</button>
+				</Button>
 			</div>
 			<div className='display-inline m-2 p3'>
 				{exercises &&
@@ -127,7 +127,7 @@ export default async function Page() {
 							<>
 								<Card
 									key={exercise.id}
-									className='bg-indigo-500 text-white m-5'>
+									className='bg-indigo-300 text-white m-5 shadow border-t-2 border-indigo-400'>
 									<CardHeader>
 										<CardTitle>{exercise.name}</CardTitle>
 										<CardDescription className='text-white'>
@@ -154,29 +154,45 @@ export default async function Page() {
 										</p>
 										<p>
 											<span className='text-xl'>Instructional Link: </span>
-											{exercise.videoLink}
+											<a
+												href={`${
+													exercise.videoLink.startsWith("http://") ||
+													exercise.videoLink.startsWith("https://")
+														? exercise.videoLink
+														: `https://${exercise.videoLink}`
+												}`}
+												className=' hover:text-blue-800'
+												rel='noopener noreferrer'
+												target='_blank'>
+												{exercise.videoLink}{" "}
+											</a>
 										</p>
 									</CardContent>
 									<CardFooter>
 										<DeleteButton id={exercise.id} />
-										<div className='m-2'>
+										<Button className='ml-5'>
 											<Link
 												href={`/dashboard/${exercise.id}/editworkout`}
-												className='shadow bg-slate-800 hover:bg-slate-900 focus:shadow-outline focus-outline-none text-white font-bold py-2.5 px-5 rounded'>
+												className='shadow '>
 												Edit
 											</Link>
-										</div>
+										</Button>
 									</CardFooter>
 								</Card>
 							</>
 						);
 					})}
-				{!exercises && (
-					<p>
-						You do not have any exercises, Add a Work to start getting stronger
-					</p>
+				{exercises.length < 1 && (
+					<div className='text-center text-xl bg-indigo-400 w-25 py-10 rounded border-indigo-600  text-white shadow mt-10'>
+						<p>You currently do not have any exercises.</p>
+						<Button className='mt-2 text-indigo-500 text-md' variant='outline'>
+							Add exercises &rarr;
+						</Button>
+					</div>
 				)}
+				<DatePicker />
 			</div>
+			<div className='py-20'></div>
 			<Footer />
 		</>
 	);

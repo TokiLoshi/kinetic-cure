@@ -383,6 +383,13 @@ export async function deleteExercise(id: number, inViewRoute = false) {
 	});
 	console.log("Prs deleted, on to the exercise");
 
+	await prisma.exerciseMuscleGroup.deleteMany({
+		where: {
+			exerciseId: id,
+		},
+	});
+	console.log(`ExerciseMuscleGroup records deleted, moving on...`);
+
 	const deletedExercise = await prisma.exercises.delete({
 		where: {
 			id: +id,

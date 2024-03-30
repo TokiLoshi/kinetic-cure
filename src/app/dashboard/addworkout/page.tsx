@@ -29,19 +29,19 @@ export default async function Page() {
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
-			<div className='py-20 mx-auto text-center flex flex-col items-center max-w-3xl'>
-				<WorkoutForm
-					formAction={addExercise}
-					initialData={{
-						name: "",
-						description: "",
-						muscleGroups: [],
-						equipment: "",
-						videoLink: "",
-						exerciseType: "",
-					}}
-				/>
-			</div>
+
+			<WorkoutForm
+				formAction={addExercise}
+				initialData={{
+					name: "",
+					description: "",
+					muscleGroups: [],
+					equipment: "",
+					videoLink: "",
+					exerciseType: "",
+				}}
+			/>
+			<div className='py-20'></div>
 			<Footer />
 		</>
 	);

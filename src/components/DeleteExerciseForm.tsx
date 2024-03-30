@@ -2,16 +2,17 @@
 import { useState } from "react";
 import { deleteExercise } from "@/app/lib/actions";
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 type Props = { id: number };
 
 export default function DeleteButton({ id }: Props) {
 	const pathName = usePathname();
 	return (
-		<button
-			className='shadow bg-rose-300 hover:bg-rose-400 focus:shadow-outline focus-outline-none text-white font-bold py-2 px-4 rounded'
+		<Button
+			className='shadow'
 			onClick={() => deleteExercise(id, pathName === "/" ? false : true)}>
 			Delete
-		</button>
+		</Button>
 	);
 }
