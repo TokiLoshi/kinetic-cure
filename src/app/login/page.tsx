@@ -12,6 +12,9 @@ import type { ActionResult } from "@/app/lib/form";
 import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import prisma from "@/app/lib/prisma";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default async function Page() {
 	const { user } = await validateRequest();
@@ -25,62 +28,40 @@ export default async function Page() {
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
-			<h1 className='flex justify-center m-2 text-gray-500 font-bold'>Login</h1>
-			<div className='flex justify-center m-2'>
-				<Form action={login}>
-					<div className='w-full max-w-sm'>
-						<div className='md:flex md:items-center mb-6'>
-							<div className='md:w-1/3'>
-								<label
-									htmlFor='email'
-									className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
-									Email
-								</label>
-							</div>
-							<div className='md:w-2/3'>
-								<input
-									name='email'
-									className='bg-gray-200 p-3 appearance-none border-2 border-gray-200 rounded w-full py-2 px4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-									id='email'
-									type='text'
-									placeholder='Email'
-									autoComplete='email'
-									required
-								/>
-							</div>
-						</div>
-					</div>
-					<div className='md:flex md:items-center mb-6'>
-						<div className='md:w-1/3'>
-							<label
-								htmlFor='password'
-								className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'>
+			<div className='container relative flex pt-20 flex-col items-center justify-center lg:px-20 md:px-30 lg:w-max-400'>
+				<div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[p350px]'>
+					<div className='flex flex-col items-center space-y-2 text-center bg-indigo-300 rounded py-10 shadow'>
+						<h1 className='font-bold text-2x text-slate-900'>Log in</h1>
+						<Form action={login}>
+							<Label htmlFor='email'>Email</Label>
+							<Input
+								name='email'
+								id='email'
+								type='text'
+								placeholder='Email'
+								autoComplete='email'
+								required
+							/>
+							<Label htmlFor='password' className='mb-2'>
 								Password
-							</label>
-						</div>
-						<div className='md:w-2/3'>
-							<input
+							</Label>
+							<Input
 								name='password'
 								id='password'
 								type='password'
-								className='bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
 								placeholder='Secret password'
 								autoComplete='new-password'
 								required
 							/>
-						</div>
-					</div>
-					<div className='md:flex md:items-center'>
-						<div className='md:w-1/3'></div>
-						<div className='md:w-2/3'>
 							<LoginButton />
-						</div>
+						</Form>
 					</div>
-				</Form>
+				</div>
 			</div>
-			<div className='flex justify-center'>
+			<div className='flex justify-center mt-2'>
 				<Link href='/signup' className='m-2 text-center text-slate-500'>
-					Need an account? Register <span className='underline'>here</span>
+					Need an account? Register{" "}
+					<span className='underline'>here &rarr;</span>
 				</Link>
 			</div>
 			<Footer />
@@ -90,11 +71,9 @@ export default async function Page() {
 
 function LoginButton() {
 	return (
-		<button
-			type='submit'
-			className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded'>
+		<Button type='submit' className='shadow mt-2'>
 			Login
-		</button>
+		</Button>
 	);
 }
 
