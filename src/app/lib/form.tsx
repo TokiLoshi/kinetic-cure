@@ -1,5 +1,6 @@
 "use client";
 import { useFormState } from "react-dom";
+import Toast from "@/components/Toast";
 
 export function Form({
 	children,
@@ -8,20 +9,32 @@ export function Form({
 	children: React.ReactNode;
 	action: (prevState: any, formData: FormData) => Promise<ActionResult>;
 }) {
-	console.log(`Action: ${action}`);
+	console.log("Children: ", children);
 	const [state, formAction] = useFormState(action, {
 		error: null,
+		loading: null,
+		success: null,
 	});
+	console.log("State in form: ", state);
 	return (
-		<form action={formAction} className=' justify-center'>
-			{children}
-			<p className='text-red-500 text-xs italic text-center m-2 p-2'>
-				{state.error}
-			</p>
-		</form>
+		<>
+			{state.error && (
+				<Toast
+					error={state.error}
+					success={state.success}
+					loading={state.loading}
+				/>
+			)}
+			<p>{state.error}</p>
+			<form action={formAction} className=' justify-center'>
+				{children}
+			</form>
+		</>
 	);
 }
 
 export interface ActionResult {
 	error: string | null;
+	success: string | null;
+	loading: boolean | null;
 }

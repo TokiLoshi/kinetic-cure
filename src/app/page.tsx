@@ -126,7 +126,9 @@ async function logout(): Promise<ActionResult> {
 	const { session } = await validateRequest();
 	if (!session) {
 		return {
+			success: null,
 			error: "Unauthorized",
+			loading: false,
 		};
 	}
 

@@ -15,15 +15,35 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import prisma from "@/app/lib/prisma";
+import { getUser } from "@/app/lib/auth";
 
-const prisma = new PrismaClient();
+interface UserLogin {
+	user: UserDetails | null;
+	session: any | null;
+	username: any | null;
+	id: any | null;
+	authorId: any | null;
+}
+
+interface UserDetails {
+	id: string;
+	username: string;
+	email: string;
+	name?: string;
+	dateJoined: string;
+	distanceMetric: string;
+	weightMetric: string;
+	totalWorkouts: number;
+}
 
 export default async function Page() {
-	const { user } = await validateRequest();
-	if (user) {
-		redirect("/");
+	const user = (await getUser()) as UserLogin;
+	console.log("user ");
+	if (user && user.user !== null) {
+		redirect("/dashboard");
 	}
-	let isLoggedIn = true;
+	let isLoggedIn = false;
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
@@ -117,7 +137,9 @@ async function signup(_: any, formData: FormData): Promise<ActionResult> {
 			}, regex check ${!/^[a-z0-9_-]+$/.test(JSON.stringify(username))}`
 		);
 		return {
+			success: null,
 			error: "Invalid username",
+			loading: false,
 		};
 	}
 	const password = formData.get("password");
@@ -127,13 +149,17 @@ async function signup(_: any, formData: FormData): Promise<ActionResult> {
 		password.length > 255
 	) {
 		return {
-			error: "Invalid password",
+			success: null,
+			error: "Passwords must be a minimum of 8 characters",
+			loading: false,
 		};
 	}
 	const passwordConfirmation = formData.get("confirmPassword");
 	if (password !== passwordConfirmation) {
 		return {
+			success: null,
 			error: "Passwords do not match",
+			loading: false,
 		};
 	}
 
@@ -165,12 +191,16 @@ async function signup(_: any, formData: FormData): Promise<ActionResult> {
 	} catch (e) {
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
 			return {
+				success: null,
 				error: "This email has been taken, did you mean to login instead?",
+				loading: false,
 			};
 		} else {
 			console.log(`Error: ${e}`);
 			return {
+				success: null,
 				error: "An unknown error occurred",
+				loading: false,
 			};
 		}
 	}

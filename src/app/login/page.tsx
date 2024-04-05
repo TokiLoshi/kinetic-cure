@@ -53,6 +53,7 @@ export default async function Page() {
 								autoComplete='new-password'
 								required
 							/>
+
 							<LoginButton />
 						</Form>
 					</div>
@@ -88,7 +89,9 @@ async function login(_: any, formData: FormData): Promise<ActionResult> {
 		!/^[a-z0-9_-]+$/.test(username)
 	) {
 		return {
+			success: null,
 			error: "Invalid username",
+			loading: false,
 		};
 	}
 	const password = formData.get("password");
@@ -98,7 +101,9 @@ async function login(_: any, formData: FormData): Promise<ActionResult> {
 		password.length > 255
 	) {
 		return {
+			success: null,
 			error: "Invalid password",
+			loading: false,
 		};
 	}
 
@@ -109,7 +114,9 @@ async function login(_: any, formData: FormData): Promise<ActionResult> {
 	});
 	if (!existingUser) {
 		return {
+			success: null,
 			error: "Incorrect username or password",
+			loading: false,
 		};
 	}
 
@@ -119,7 +126,9 @@ async function login(_: any, formData: FormData): Promise<ActionResult> {
 	);
 	if (!validPassword) {
 		return {
+			success: null,
 			error: "Incorrect username or password",
+			loading: false,
 		};
 	}
 

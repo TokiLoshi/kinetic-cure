@@ -50,9 +50,10 @@ async function getExercises(user: UserDetails) {
 
 export default async function Page() {
 	const user = (await getUser()) as UserLogin;
+	console.log("User: ", user);
 
 	let isLoggedIn = false;
-	if (!user || user === null) {
+	if (!user || user.user === null) {
 		redirect("/login");
 	}
 	console.log(`User in addworkout page: ${JSON.stringify(user)}`);
