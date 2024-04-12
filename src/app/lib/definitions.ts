@@ -1,5 +1,18 @@
 import { EnumType } from "typescript";
 
+export type UserLogin = {
+	email: string | null;
+	password: string | null;
+};
+
+export type User = {
+	user: DatabaseUser | null;
+	session: any | null;
+	username: string | null;
+	id: string | null;
+	authorId: string | null;
+};
+
 export type DatabaseUser = {
 	id?: string;
 	email?: string;
