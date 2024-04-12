@@ -147,15 +147,18 @@ export async function login(
 	formData: FormData
 ): Promise<FormState> {
 	// Get the fields from the form data
+	console.log("we got to the server actions");
 	const email = formData.get("email");
 	const password = formData.get("password");
 	console.log("email and password: ", email, password);
 	// Validate the data
+	console.log("testing the email");
 	if (
 		typeof email !== "string" ||
 		email.length < 3 ||
 		email.length > 31 ||
-		!/^[a-z0-9_-]+$/.test(email)
+		!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+		// !/^[a-z0-9_-]+$/.test(email)
 	) {
 		return {
 			success: false,

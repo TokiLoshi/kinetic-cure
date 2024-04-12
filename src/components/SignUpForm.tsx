@@ -41,7 +41,11 @@ export const SignUpForm = ({
 			<Form {...form}>
 				<form
 					ref={formRef}
-					onSubmit={form.handleSubmit(() => formRef.current?.requestSubmit)}
+					// onSubmit={form.handleSubmit((data) => {
+					// 	console.log("submitting form,", data);
+					// 	// formRef.current?.requestSubmit();
+					// 	console.log("form submitted");
+					// })}
 					action={formAction}
 					className='space-y-8'>
 					<div className='space-y-8'>
