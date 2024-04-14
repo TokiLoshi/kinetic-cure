@@ -41,7 +41,7 @@ export async function signup(
 		username.length < 3 ||
 		username.length > 31 ||
 		// !/^[a-z0-9_-]+$/.test(username)
-		!/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/.test(username) === false
+		!/^[a-z0-9_-]+$/.test(username) 
 	) {
 		console.log(
 			`type ${typeof username} length ${
@@ -84,6 +84,11 @@ export async function signup(
 		};
 	}
 	console.log();
+	const parsed = signUpSchema.safeParse({
+		email: username,
+		password,
+		confirmPassword: passwordConfirmation,
+	});
 
 	const hashedPassword = await new Argon2id().hash(password);
 	const userId = generateId(15);
@@ -181,14 +186,14 @@ export async function login(
 	console.log("passed the second check now checking");
 	// TODO: uncomment this line
 	// Delete all the users that dont have emails
-	// const parsed = loginSchema.safeParse({ email, password });
-	// if (!parsed.success) {
-	// 	return {
-	// 		success: false,
-	// 		error: "Invalid data",
-	// 		loading: false,
-	// 	};
-	// }
+	const parsed = loginSchema.safeParse({ email, password });
+	if (!parsed.success) {
+		return {
+			success: false,
+			error: "Invalid data",
+			loading: false,
+		};
+	}
 	// Check if there is an existing user
 	const existingUser = await prisma.user.findFirst({
 		where: {

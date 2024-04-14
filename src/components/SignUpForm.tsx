@@ -48,7 +48,7 @@ export const SignUpForm = ({
 					// })}
 					action={formAction}
 					className='space-y-8'>
-					<div className='space-y-8'>
+					<div className='space-y-8 mx-auto'>
 						<FormField
 							control={form.control}
 							name='email'
@@ -72,9 +72,11 @@ export const SignUpForm = ({
 									<FormControl>
 										<Input placeholder='' {...field} />
 									</FormControl>
+                 
 									<FormDescription>
 										Enter your super secret Password
 									</FormDescription>
+                  {state?.error && <div className="text-red-400 italics">{state.error}</div>}
 									<FormMessage />
 								</FormItem>
 							)}
@@ -87,7 +89,9 @@ export const SignUpForm = ({
 									<FormLabel>Password Confirmation</FormLabel>
 									<FormControl>
 										<Input placeholder='' {...field} />
+                   
 									</FormControl>
+                  {state?.error && <div className="text-red-400 italics">{state.error}</div>}
 									<FormDescription>
 										Please Confirm your password
 									</FormDescription>
@@ -98,68 +102,10 @@ export const SignUpForm = ({
 					</div>
 					<Button type='submit'>Sign up</Button>
 				</form>
-				{state?.error && <div>{state.error}</div>}
+				{state?.error && <div className="text-red-400 italics">{state.error}</div>}
 			</Form>
+      
+    
 		</>
 	);
 };
-
-// <Form {...form}>
-// 				<form
-// 					ref={formRef}
-// 					onSubmit={form.handleSubmit(() => formRef.current?.submit())}
-// 					action={formAction}
-// 					className='space-y-8'>
-// 					<div className='space-y-8'>
-// 						<FormField
-// 							control={form.control}
-// 							name='email'
-// 							render={({ field }) => (
-// 								<FormItem>
-// 									<FormLabel>Email</FormLabel>
-// 									<FormControl>
-// 										<Input placeholder='' {...field} />
-// 									</FormControl>
-// 									<FormDescription>Your Email</FormDescription>
-// 									<FormMessage />
-// 								</FormItem>
-// 							)}
-// 						/>
-// 						<FormField
-// 							control={form.control}
-// 							name='password'
-// 							render={({ field }) => (
-// 								<FormItem>
-// 									<FormLabel>Password</FormLabel>
-// 									<FormControl>
-// 										<Input placeholder='' {...field} />
-// 									</FormControl>
-// 									<FormDescription>
-// 										Enter your super secret Password
-// 									</FormDescription>
-// 									<FormMessage />
-// 								</FormItem>
-// 							)}
-// 						/>
-// 						<FormField
-// 							control={form.control}
-// 							name='passwordConfirmation'
-// 							render={({ field }) => (
-// 								<FormItem>
-// 									<FormLabel>Password Confirmation</FormLabel>
-// 									<FormControl>
-// 										<Input placeholder='' {...field} />
-// 										<FormDescription>
-// 											Please Confirm your password
-// 										</FormDescription>
-// 										<FormMessage />
-// 									</FormControl>
-// 								</FormItem>
-// 							)}
-// 						/>
-// 					</div>
-// 					<Button type='submit'>Sign up</Button>
-// 				</form>
-// 				{state?.error && <div>{state.error}</div>}
-// 			</Form>
-// 		</>

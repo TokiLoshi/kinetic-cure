@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { validateRequest } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/DesktopNavigation";
@@ -7,7 +6,7 @@ import { signup } from "@/app/actions";
 import { SignUpForm } from "@/components/SignUpForm";
 import { FormState } from "@/app/actions/index";
 
-export default async function Page() {
+export default async function SignInPage() {
 	let isLoggedIn = false;
 	const { user } = await validateRequest();
 
@@ -38,6 +37,7 @@ export default async function Page() {
 					</div>
 				</div>
 			</div>
+			<div className="min-h-80"></div>
 			<Footer />
 		</>
 	);
