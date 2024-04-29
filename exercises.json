@@ -24,7 +24,8 @@
 		"2": "reverse lunge",
 		"3": "curtsy lunge",
 		"4": "walking lunge",
-		"5": "front lunge"
+		"5": "front lunge",
+		"6": "drop lunges"
 	},
 	"squats": {
 		"1": "squat jump",
@@ -42,7 +43,8 @@
 		"13": "sumo squat",
 		"14": "pause squat",
 		"15": "box squat",
-		"16": "squat"
+		"16": "squat",
+		"17": "zercher squat"
 	},
 	"presses": {
 		"1": "overhead press",
@@ -51,18 +53,21 @@
 		"4": "incline press",
 		"5": "decline press",
 		"6": "clean and press",
-		"7": "neutral grip press",
-		"8": "wide grip press",
-		"9": "close grip press",
-		"10": "single arm press",
-		"11": "arnold press",
-		"12": "push up",
-		"13": "dip",
-		"14": "bench press",
-		"15": "military press",
-		"16": "shoulder press",
-		"17": "devils press",
-		"18": "leg press"
+		"7": "clean and jerk",
+		"8": "neutral grip press",
+		"9": "wide grip press",
+		"10": "close grip press",
+		"11": "single arm press",
+		"12": "arnold press",
+		"13": "push up",
+		"14": "dip",
+		"15": "bench press",
+		"16": "military press",
+		"17": "shoulder press",
+		"18": "devils press",
+		"19": "leg press",
+		"20": "parallel bar dips",
+		"21": "chest flys"
 	},
 	"pulls": {
 		"1": "pull up",
@@ -80,7 +85,8 @@
 		"13": "kipping chin up",
 		"14": "skull crushers",
 		"15": "high pull",
-		"16": "prone lat pull down"
+		"16": "prone lat pull down",
+		"17": "dumbell pullover"
 	},
 	"crunches": {
 		"1": "reverse crunch",
@@ -108,7 +114,8 @@
 		"16": "sit up",
 		"17": "roll up",
 		"18": "prone swimmer",
-		"19": "tuck up"
+		"19": "tuck up",
+		"20": "ab wheel"
 	},
 	"planking": {
 		"1": "high plank",
@@ -166,7 +173,13 @@
 		"17": "leg adduction",
 		"18": "hip abduction",
 		"19": "hip adduction",
-		"20": "tricep kickback"
+		"20": "tricep kickback",
+		"21": "tricep extensions",
+		"22": "hang snatch",
+		"23": "hanging knee raise",
+		"24": "jump rope",
+		"25": "jumping jacks",
+		"26": "step up"
 	},
 	"curls": {
 		"1": "leg curl",
@@ -176,6 +189,7 @@
 		"5": "concentration curl",
 		"6": "preacher curl",
 		"7": "spider curl",
-		"8": "zottman curl"
+		"8": "zottman curl",
+		"9": "cable curl"
 	}
 }

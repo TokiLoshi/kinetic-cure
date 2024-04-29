@@ -63,7 +63,7 @@ export default async function Page() {
 			<Navbar isLoggedIn={isLoggedIn} />
 			<MaxWidthWrapper>
 				<div className='py-20 mx-auto text-center flex flex-col items-center max-w-3xl'>
-					<h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl'>
+					<h1 className='text-4xl font-bold tracking-tight text-gray-500 sm:text-6xl'>
 						Welcome to{" "}
 						<span className='text-indigo-400 hover:text-indigo-600'>
 							Kinetic Cure{" "}

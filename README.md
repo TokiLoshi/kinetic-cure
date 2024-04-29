@@ -1,6 +1,6 @@
 # kinetic-cure
 
-Community Hackathon Project hosted by DonTheDeveloper
+I have too many fitness apps on my phone and can never remember how many reps I've done or which physio exercises I'm supposed to do, I'd also really like to see some progress with my history. I don't have this with my current apps so wanted to create my own for everything in one place. Most of the physio apps require a sign in from a dr or physio
 
 ## About the Databse
 
