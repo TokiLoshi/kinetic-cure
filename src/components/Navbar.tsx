@@ -28,13 +28,13 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 	console.log(`Logged state: ${loggedState.isLoggedIn}`);
 	return (
 		<>
-			<nav className='flex items-center justify-between flex-wrap bg-zinc-800 p-6'>
+			<nav className='flex items-center justify-between flex-wrap bg-slate-950 p-6'>
 				<div className='flex items-center flex-shrink-0 text-white mr-6'>
 					<Beaker />
 					sadfadsf
 					<span className='font-semibold text-xl tracking-tight ml-2 text-indigo-500'>
 						{" "}
-						Kinetic
+						Kinetic Muscle
 						<Link href='/'>Cure Logo</Link>
 					</span>
 				</div>

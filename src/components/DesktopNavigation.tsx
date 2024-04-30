@@ -29,7 +29,7 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 	console.log(`Logged state: ${loggedState.isLoggedIn}`);
 	return (
 		<>
-			<nav className='flex items-center justify-between bg-zinc-900 p-6'>
+			<nav className='flex items-center justify-between bg-slate-900 p-6'>
 				<div className='flex items-center flex-shrink-0 text-white mr-6'>
 					<Beaker />
 
