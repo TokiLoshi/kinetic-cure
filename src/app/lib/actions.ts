@@ -368,7 +368,8 @@ interface deleteExerciseFormState {
 	};
 }
 
-export async function deleteExercise(id: number, inViewRoute = false) {
+export async function deleteExercise(id: number) {
+	console.log("IN ACTIONS to DELETE Exercise");
 	console.log(`id we got back: ${id} we're about to delete the PRS`);
 	if (!id) {
 		return {
@@ -405,9 +406,5 @@ export async function deleteExercise(id: number, inViewRoute = false) {
 		};
 	}
 	console.log(`Deleted Exercise`);
-	if (inViewRoute) {
-		redirect("/dashboard");
-	} else {
-		redirect("/dashboard");
-	}
+	redirect("/dashboard");
 }

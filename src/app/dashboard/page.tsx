@@ -110,14 +110,10 @@ export default async function Page() {
 
 			<div className='flex justify-center gap-10'>
 				<Button className='gap-2'>
-					<Link href='/dashboard/logworkout'>
-						Log Workout
-					</Link>
+					<Link href='/dashboard/workout/workout-log'>Log Workout</Link>
 				</Button>
 				<Button>
-					<Link href='/dashboard/addworkout'>
-						Add Exercise
-					</Link>
+					<Link href='/dashboard/exercise/exercise-add'>Add Exercise</Link>
 				</Button>
 			</div>
 			<div className='display-inline m-2 p3'>
@@ -130,7 +126,9 @@ export default async function Page() {
 									className='bg-indigo-300 text-white m-5 shadow border-t-2 border-indigo-400'>
 									<CardHeader>
 										<CardTitle>{exercise.name}</CardTitle>
-										<CardDescription className='text-white' key={`${exercise.id}-description`}>
+										<CardDescription
+											className='text-white'
+											key={`${exercise.id}-description`}>
 											<span className='text-xl text-muted'>Decription: </span>
 											{exercise.description}
 										</CardDescription>
@@ -169,11 +167,9 @@ export default async function Page() {
 										</p>
 									</CardContent>
 									<CardFooter key={`${exercise.id}-footer`}>
-										<DeleteButton id={exercise.id} />
+										<DeleteButton id={exercise.id} onDelete={deleteExercise} />
 										<Button className='ml-5'>
-											<Link
-												href={`/dashboard/${exercise.id}/editworkout`}
-												>
+											<Link href={`/dashboard/${exercise.id}/exercise-edit`}>
 												Edit
 											</Link>
 										</Button>
