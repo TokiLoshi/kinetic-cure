@@ -15,7 +15,7 @@ interface User {
 	username: any | null;
 }
 
-export default async function Page() {
+export default async function AddExercise() {
 	const user = (await getUser()) as User;
 	console.log(`User in addworkout page: ${JSON.stringify(user)}`);
 	console.log(`Unpack user: ${user?.username?.email}`);
