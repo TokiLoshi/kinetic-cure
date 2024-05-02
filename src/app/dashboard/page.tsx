@@ -9,6 +9,10 @@ import Navbar from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import prisma from "@/app/lib/prisma";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React from "react";
+import dynamic from "next/dynamic";
+import GraphComponent from "@/components/graphs";
 
 import {
 	Card,
@@ -19,6 +23,11 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import DatePicker from "@/components/DatePicker";
+
+interface quotes {
+	id: string;
+	quote: string;
+}
 
 interface User {
 	user: any | null;
@@ -53,6 +62,14 @@ interface ProcessedExercise {
 	exerciseType: string;
 	muscleGroups: string[];
 }
+
+// TODO:
+// Finish this to pull motivational quotes from json file
+const randomQuote = () => {
+	console.log("Getting randomQuote");
+	const randomNumber = Math.random() * 10;
+	console.log("random number");
+};
 
 async function getExercises() {
 	const exercises = await prisma.exercises.findMany({
@@ -100,14 +117,23 @@ export default async function Page() {
 	let isLoggedIn = true;
 
 	console.log("Exercises length: ", exercises.length);
-
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />
+			<div className='flex items-center justify-center gap-5 m-3'>
+				{/* TODO: Need to update this for the user or allow them to customize */}
+				<Avatar>
+					<AvatarImage src='https://github.com/shadcn.png' />
+					<AvatarFallback>CN</AvatarFallback>
+				</Avatar>
+				<p className='text-pretty'>{email}</p>
+			</div>
 			<h1 className='text-center m-2 text-bold text-xl'>
-				Welcome back! What shall we do next? {email}!
+				What shall we do next?!
 			</h1>
-
+			<p className='text-center mb-2'>
+				<span className='text-pretty'>Motivational Quote</span> goes here
+			</p>
 			<div className='flex justify-center gap-10'>
 				<Button className='gap-2'>
 					<Link href='/dashboard/workout/workout-log'>Log Workout</Link>
@@ -116,6 +142,7 @@ export default async function Page() {
 					<Link href='/dashboard/exercise/exercise-add'>Add Exercise</Link>
 				</Button>
 			</div>
+
 			<div className='display-inline m-2 p3'>
 				{exercises &&
 					exercises.map((exercise: ProcessedExercise) => {
@@ -188,7 +215,13 @@ export default async function Page() {
 				)}
 				<DatePicker />
 			</div>
-			<div className='py-20'></div>
+			<div className='py-24 mb-5'>
+				<h1 className='text-4xl text-center text-indigo-500'>
+					Graph Placeholder
+				</h1>
+				<GraphComponent label='ok' />
+				<div className='mb-10'>Spacer</div>
+			</div>
 			<Footer />
 		</>
 	);

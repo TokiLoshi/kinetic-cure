@@ -3,6 +3,7 @@ import Nav from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface User {
 	user: any | null;
@@ -48,6 +49,12 @@ export default async function UserPreferences() {
 			<div className='flex justify-center bg-slate-500 m-2'>
 				<h1 className='text-pretty'>Here are your preferences:</h1>
 				<div className='justify-center m-2'>
+					{/* TODO: Need to update this for the user or allow them to customize */}
+					<Avatar>
+						<AvatarImage src='https://github.com/shadcn.png' />
+						<AvatarFallback>CN</AvatarFallback>
+					</Avatar>
+
 					<p>Email: {email} </p>
 					<p>Date Joined: {dateJoined} </p>
 					{name && <p>Name: </p>}
