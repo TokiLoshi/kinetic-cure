@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ModelViewer from "@/components/modelviewer";
 
 interface User {
 	user: any | null;
@@ -62,6 +63,9 @@ export default async function UserPreferences() {
 					<p> Weigh Metric: {weightMetric} </p>
 					<p>Total Workouts: {totalWorkouts}</p>
 				</div>
+			</div>
+			<div>
+				<ModelViewer />
 			</div>
 			<Footer />
 		</>

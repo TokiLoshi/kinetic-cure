@@ -4,6 +4,7 @@ import { getUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import ModelViewer from "@/components/modelviewer";
 
 interface User {
 	user: any | null;
@@ -21,6 +22,9 @@ export default async function WorkoutDone() {
 	return (
 		<>
 			<Nav isLoggedIn={isLoggedIn} />
+			<div>
+				<ModelViewer />
+			</div>
 			<div className=' justify-center bg-indigo-300 m-2 p-2 rounded shadow'>
 				<h1 className='text-4xl'>Success! Your workout has been logged</h1>
 				<p>

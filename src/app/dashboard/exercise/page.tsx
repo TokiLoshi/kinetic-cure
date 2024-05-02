@@ -2,6 +2,7 @@ import Nav from "@/components/DesktopNavigation";
 import Footer from "@/components/Footer";
 import { getUser } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
+import ModelViewer from "@/components/modelviewer";
 
 interface User {
 	user: any | null;
@@ -21,6 +22,7 @@ export default async function Exercise() {
 			<Nav isLoggedIn={isLoggedIn} />
 			<div>
 				<h1 className='text-center text-4xl'>Main Exercise Page</h1>
+				<ModelViewer />
 			</div>
 			<Footer />
 		</>

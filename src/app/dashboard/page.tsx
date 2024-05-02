@@ -14,6 +14,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import GraphComponent from "@/components/graphs";
 import ModelViewer from "@/components/modelviewer";
+import ToDos from "@/components/ToDoList";
 
 import {
 	Card,
@@ -100,7 +101,7 @@ async function getExercises() {
 	});
 }
 
-export default async function Page() {
+export default async function Dashboard() {
 	const result = (await getUser()) as User;
 	const user = result;
 	if (!user) {
@@ -143,7 +144,9 @@ export default async function Page() {
 					<Link href='/dashboard/exercise/exercise-add'>Add Exercise</Link>
 				</Button>
 			</div>
-
+			<div className='flex justify-center'>
+				<ToDos />
+			</div>
 			<div className='display-inline m-2 p3'>
 				{exercises &&
 					exercises.map((exercise: ProcessedExercise) => {
