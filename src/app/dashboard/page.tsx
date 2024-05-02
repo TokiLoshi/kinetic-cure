@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
 import dynamic from "next/dynamic";
 import GraphComponent from "@/components/graphs";
+import ModelViewer from "@/components/modelviewer";
 
 import {
 	Card,
@@ -214,6 +215,10 @@ export default async function Page() {
 					</div>
 				)}
 				<DatePicker />
+				<div className='model-container'>
+					<h1 className='text-center'>Placeholder for 3D model</h1>
+					<ModelViewer />
+				</div>
 			</div>
 			<div className='py-24 mb-5'>
 				<h1 className='text-4xl text-center text-indigo-500'>
