@@ -119,6 +119,7 @@ export default async function Dashboard() {
 	let isLoggedIn = true;
 
 	console.log("Exercises length: ", exercises.length);
+
 	return (
 		<>
 			<Navbar isLoggedIn={isLoggedIn} />

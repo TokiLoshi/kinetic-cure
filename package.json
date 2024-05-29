@@ -23,6 +23,7 @@
 		"@radix-ui/react-select": "^2.0.0",
 		"@radix-ui/react-slot": "^1.0.2",
 		"@react-three/drei": "^9.105.6",
+		"@react-three/fiber": "^8.16.6",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/nodemailer": "^6.4.14",
 		"@vercel/postgres": "^0.7.2",

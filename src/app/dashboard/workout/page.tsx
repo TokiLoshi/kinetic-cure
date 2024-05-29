@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ModelViewer from "@/components/modelviewer";
+import Timer from "@/components/timer";
 
 interface User {
 	user: any | null;
@@ -24,7 +25,8 @@ export default async function WorkoutHub() {
 			<Nav isLoggedIn={isLoggedIn} />
 			<h1 className='text-center text-4xl'>Main Workout Page</h1>
 			<div className='mb-3'>
-				<ModelViewer />
+				{/* <ModelViewer /> */}
+				<Timer />
 			</div>
 			<div className='flex items-center gap-5'>
 				<Button>
