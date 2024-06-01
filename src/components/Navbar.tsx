@@ -30,6 +30,7 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 		<>
 			<nav className='flex items-center justify-between flex-wrap bg-slate-950 p-6'>
 				<div className='flex items-center flex-shrink-0 text-white mr-6'>
+					This is navbar.tsx
 					<Beaker />
 					sadfadsf
 					<span className='font-semibold text-xl tracking-tight ml-2 text-indigo-500'>

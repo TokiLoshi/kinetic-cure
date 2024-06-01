@@ -78,7 +78,9 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 								<div>
 									<div className='grid gap-4 py-8'>
 										<div className='grid grid-cols-12  gap-4'>
-											<Link href='/dashboard/addworkout'>Add Workout</Link>
+											<Link href='/dashboard/exercise/exercise-add'>
+												This should change
+											</Link>
 										</div>
 									</div>
 								</div>
@@ -131,8 +133,8 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 									</Link>
 									<Link
 										className='m-2 text-white text-xl hover:text-indigo-300'
-										href='/dashboard/addworkout'>
-										Add Workout
+										href='/dashboard/exercise/exercise-add'>
+										Add Exercise
 									</Link>
 									<Link
 										className='m-2 text-white text-xl hover:text-indigo-300'

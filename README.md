@@ -1,53 +1,78 @@
-# kinetic-cure
+# Kinetic Cure
 
-I have too many fitness apps on my phone and can never remember how many reps I've done or which physio exercises I'm supposed to do, I'd also really like to see some progress with my history. I don't have this with my current apps so wanted to create my own for everything in one place. Most of the physio apps require a sign in from a dr or physio
+## TODO
 
-## About the Databse
+### Features
 
-Kinetic Cure has a postgreSQL database provisioned through Vercel. Here are the initial thoughts on the database schema:
+- [x] Fix Nav Routing (add workout broken)
+- [ ] Update all the packages
+- [ ] Fix select on exercise (why is it fruit?)
+- [ ] Add user settings page and add to Navbar
+- [ ] passwords should be hidden on forms
+- [ ] usernames on signup forms should be emails
+- [ ] dashboard should only show user exercises / workouts and admin defaults
+- [ ] Fix prisma client too many renders
+- [ ] Configure turbo pack
+- [ ] CRUD for user settings
+- [ ] Timer component for workouts
+- [ ] Add psuedocode for workouts
+- [ ] CRUD workouts
+- [ ] Add goals for frequency users would like to do workouts
+- [ ] Logging Workouts pseudocode
+- [ ] CRUD for logged workouts
+- [ ] Metric conversion for user preferences
+- [ ] Mobile nav bar
+- [ ] Add admin generated workouts
+- [ ] date picker to track streaks
+- [ ] add search functionality
+- [ ] Filter workouts
+- [ ] Handle Error messaging
+- [ ] Graph Data / charts
+- [ ] Allow social logins
+- [ ] Upload / display favicon
+- [ ] Fix caching and force dynamic where data updates
+- [ ] Clean up schema
+- [ ] Clean up zod files
+- [ ] Clean up unused code
 
-![alt text](DBscreenshot1.png)
-![alt text](DBscreenshot2.png)
+### Styling
 
-This is a work in progress and I plan to remove these from the root and generate better documentation about the database schema.
+- [ ] Navbar
+- [ ] Mobile nav bar
+- [ ] Login Form
+- [ ] Signup Form
+- [ ] Log workout
+- [ ] Log exercise
+- [ ] Glassmorphism styling
+- [ ] Post processing effect(EffectComposer, ShaderPass)
+- [ ] add framer motion
+- [ ] Dashboard
+- [ ]
 
-Decided to use API ninjas api and signed up for a free api key, documentation: https://api-ninjas.com/api/exercises
+### Optimization
 
-## How to Run
+- [ ] Accessibility
+- [ ] mobile responsiveness
+- [ ] install perf and optimize where possible ensuring antialiazing and minimizing draw calls
+- [ ] add loading state - custom animation
+- [ ] rate limiting? upstash?
+- [ ] add in dynamic imports
+- [ ] Ensure prisma clients aren't being generated needlessly
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+3D Models
 
-## Getting Started
+- [ ] create blender 3D Body model
+- [ ] load 3D Body model
+- [ ] conditionally render colours to 3D Body model
+- [ ] blender 3D gym
+- [ ] import gym model
+- [ ] blender exercise model / canvas / animations / shader (shader toy)
+- [ ] import exercise model
 
-First, run the development server:
+External APIS
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [ ] Sync workouts from Peloton
+- [ ] review whoop integration
+- [ ] review strava integration
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+I have too many fitness apps on my phone and can never remember how many reps I've done or which physio exercises I'm supposed to do, I'd also like to track my progress better. I don't have this with my current apps and decided to build my own experience with everything in one place.
