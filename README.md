@@ -5,16 +5,20 @@
 ### Features
 
 - [x] Fix Nav Routing (add workout broken)
-- [ ] Update all the packages
+- [x] Update all the packages - fix react-three fiber deprecation
+- [ ] Add dynamic imports to models
 - [ ] Fix select on exercise (why is it fruit?)
-- [ ] Add user settings page and add to Navbar
+- [ ] Add user settings page with Avatar to Navbar
 - [ ] passwords should be hidden on forms
 - [ ] usernames on signup forms should be emails
 - [ ] dashboard should only show user exercises / workouts and admin defaults
+
 - [ ] Fix prisma client too many renders
+- [ ] Fix production - why is webpack crying?
 - [ ] Configure turbo pack
 - [ ] CRUD for user settings
 - [ ] Timer component for workouts
+
 - [ ] Add psuedocode for workouts
 - [ ] CRUD workouts
 - [ ] Add goals for frequency users would like to do workouts
@@ -31,9 +35,6 @@
 - [ ] Allow social logins
 - [ ] Upload / display favicon
 - [ ] Fix caching and force dynamic where data updates
-- [ ] Clean up schema
-- [ ] Clean up zod files
-- [ ] Clean up unused code
 
 ### Styling
 
@@ -47,7 +48,7 @@
 - [ ] Post processing effect(EffectComposer, ShaderPass)
 - [ ] add framer motion
 - [ ] Dashboard
-- [ ]
+- [ ] UserPreferences
 
 ### Optimization
 
@@ -58,8 +59,12 @@
 - [ ] rate limiting? upstash?
 - [ ] add in dynamic imports
 - [ ] Ensure prisma clients aren't being generated needlessly
+- [ ] remove unused dependencies
+- [ ] Clean up schema
+- [ ] Clean up zod files
+- [ ] Clean up unused code
 
-3D Models
+### 3D Models
 
 - [ ] create blender 3D Body model
 - [ ] load 3D Body model

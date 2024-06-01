@@ -4,7 +4,12 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ModelViewer from "@/components/modelviewer";
+// import ModelViewer from "@/components/modelviewer";
+import dynamic from "next/dynamic";
+
+const DynamicModelViewer = dynamic(() => import("@/components/modelviewer"), {
+	ssr: false,
+});
 
 interface User {
 	user: any | null;
@@ -65,7 +70,7 @@ export default async function UserPreferences() {
 				</div>
 			</div>
 			<div>
-				<ModelViewer />
+				<DynamicModelViewer />
 			</div>
 			<Footer />
 		</>
